@@ -18,7 +18,7 @@ unmanagedSourceDirectories in Test := (scalaSource in Test).value :: Nil
 // ### DEPENDENCIES ### //
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.0.M8" % "test"
+  "org.scalatest" %% "scalatest" % "2.0.M7" % "test"
 , "junit" % "junit" % "4.11" % "test"
 )
 
@@ -39,7 +39,7 @@ publishArtifact in (Compile, packageDoc) := false
 
 // ### COMPILE SETTINGS ### //
 
-crossScalaVersions := Seq("2.10.2")
+crossScalaVersions := Seq("2.11.0-M5")
 
 scalaVersion := crossScalaVersions.value.head
 
