@@ -18,7 +18,7 @@ unmanagedSourceDirectories in Test := (scalaSource in Test).value :: Nil
 // ### DEPENDENCIES ### //
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.0.M8" % "test"
+  "org.scalatest" %% "scalatest" % "2.0.M5b" % "test"
 , "junit" % "junit" % "4.11" % "test"
 )
 
@@ -39,7 +39,7 @@ publishArtifact in (Compile, packageDoc) := false
 
 // ### COMPILE SETTINGS ### //
 
-crossScalaVersions := Seq("2.10.2")
+crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2", "2.9.3")
 
 scalaVersion := crossScalaVersions.value.head
 
@@ -53,14 +53,6 @@ scalacOptions := Seq(
 , "-Ydead-code"
 , "-Yinline"
 , "-Xmax-classfile-name", "72"
-, "-Yrepl-sync"
-, "-Xlint"
-, "-Xverify"
-, "-Ywarn-all"
-, "-feature"
-, "-language:postfixOps"
-, "-language:implicitConversions"
-, "-language:existentials"
 )
 
 javaHome := sys.env.get("JDK16_HOME").map(file(_))
