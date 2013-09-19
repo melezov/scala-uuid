@@ -2,12 +2,12 @@ package io.jvm
 package object uuid extends Imports {
 
 implicit class RichUUID private[uuid] (val uuid: java.util.UUID) extends AnyVal {
-  def leastSigBits: Long = uuid.getLeastSignificantBits
   def mostSigBits: Long = uuid.getMostSignificantBits
+  def leastSigBits: Long = uuid.getLeastSignificantBits
 
   def byteArray: Array[Byte] = {
-    val msb = mostSigBits
-    val lsb = leastSigBits
+    val msb = uuid.getMostSignificantBits
+    val lsb = uuid.getLeastSignificantBits
 
     Array(
       (msb >>> 56).toByte
