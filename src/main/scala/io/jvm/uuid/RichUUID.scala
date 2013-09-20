@@ -8,8 +8,12 @@ package object uuid extends Imports {
 package uuid {
 
 class RichUUID private[uuid] (uuid: java.util.UUID) {
+  def string = uuid.toString
+
   def mostSigBits: Long = uuid.getMostSignificantBits
   def leastSigBits: Long = uuid.getLeastSignificantBits
+
+  def longs = (uuid.getMostSignificantBits, uuid.getLeastSignificantBits)
 
   def byteArray: Array[Byte] = {
     val msb = uuid.getMostSignificantBits
