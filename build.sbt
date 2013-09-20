@@ -8,7 +8,7 @@ organization := "io.jvm"
 
 name := "scala-uuid"
 
-version := "0.1.1-SNAPSHOT"
+version := "0.1.1"
 
 unmanagedSourceDirectories in Compile := (scalaSource in Compile).value :: Nil
 
@@ -39,7 +39,7 @@ publishArtifact in (Compile, packageDoc) := false
 
 // ### COMPILE SETTINGS ### //
 
-crossScalaVersions := Seq("2.10.2")
+crossScalaVersions := Seq("2.10.3-RC2")
 
 scalaVersion := crossScalaVersions.value.head
 

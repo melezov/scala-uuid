@@ -10,6 +10,9 @@ object StaticUUID {
   def apply(mostSigBits: Long, leastSigBits: Long): UUID =
     new java.util.UUID(mostSigBits, leastSigBits)
 
+  def apply(bits: (Long, Long)): UUID =
+    new java.util.UUID(bits._1, bits._2)
+
   def apply(uuid: Array[Byte]): UUID = {
     require(uuid ne null, "UUID cannot be created from a null byte array")
     require(uuid.length == 16, s"Invalid size of input byte array, expected 16 but got ${uuid.length} bytes")
