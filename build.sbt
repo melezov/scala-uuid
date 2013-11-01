@@ -8,7 +8,7 @@ organization := "io.jvm"
 
 name := "scala-uuid"
 
-version := "0.1.1"
+version := "0.1.2"
 
 unmanagedSourceDirectories in Compile := (scalaSource in Compile).value :: Nil
 
@@ -18,7 +18,7 @@ unmanagedSourceDirectories in Test := (scalaSource in Test).value :: Nil
 // ### DEPENDENCIES ### //
 
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.0.M7" % "test"
+  "org.scalatest" % "scalatest_2.11.0-M5" % "2.0.M7" % "test"
 , "junit" % "junit" % "4.11" % "test"
 )
 
@@ -39,7 +39,7 @@ publishArtifact in (Compile, packageDoc) := false
 
 // ### COMPILE SETTINGS ### //
 
-crossScalaVersions := Seq("2.11.0-M5")
+crossScalaVersions := Seq("2.11.0-M6")
 
 scalaVersion := crossScalaVersions.value.head
 
