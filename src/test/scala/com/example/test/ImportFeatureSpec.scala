@@ -3,12 +3,13 @@ package com.example.test
 import org.junit.runner.RunWith
 import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
-import org.scalatest.matchers.MustMatchers
+import org.scalatest.matchers.ShouldMatchers
+
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class ImportFeatureSpec
-    extends FeatureSpec with GivenWhenThen with MustMatchers {
+    extends FeatureSpec with GivenWhenThen with ShouldMatchers {
 
   feature("scala-uuid functionality can be imported easily"){
     scenario("Direct Import") {
@@ -21,7 +22,7 @@ class ImportFeatureSpec
       assert(UUID.random match { case _: UUID => true })
 
       and("the static forwarder type must work")
-      UUID.random.getClass must be (classOf[UUID])
+      UUID.random.getClass should be (classOf[UUID])
     }
 
     scenario("Import by extending") {
@@ -34,7 +35,7 @@ class ImportFeatureSpec
           assert(UUID.random match { case _: UUID => true })
 
           and("the static forwarder type must work")
-          UUID.random.getClass must be (classOf[UUID])
+          UUID.random.getClass should be (classOf[UUID])
         }
       }
 
