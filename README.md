@@ -6,8 +6,8 @@ A Scala wrapper for java.util.UUID - inspired by scala-time
 Latest version (0.1.1) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
-**2.10.x**: 2.10.3-RC2  
-**2.11.x**: 2.11.0-M5
+**2.10.x**: 2.10.3  
+**2.11.x**: 2.11.0-M6
 
 In order to add the library dependency to your project, add the Element resolver:
 
@@ -15,7 +15,7 @@ In order to add the library dependency to your project, add the Element resolver
 
 And then
 
-    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.1"
+    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.2"
 
 In order to use:
 
@@ -41,7 +41,7 @@ Constructors:
     scala> UUID((3L, 4L))
     res4: io.jvm.uuid.UUID = 00000000-0000-0003-0000-000000000004
 
-    scala> UUID(Array[Byte](1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,1 1, 12, 13, 14 ,15, 16))
+    scala> UUID(Array[Byte](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16))
     res5: io.jvm.uuid.UUID = 01020304-0506-0708-090a-0b0c0d0e0f10
 
 Accessors:
