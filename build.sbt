@@ -8,7 +8,7 @@ organization := "io.jvm"
 
 name := "scala-uuid"
 
-version := "0.1.1"
+version := "0.1.2"
 
 unmanagedSourceDirectories in Compile := (scalaSource in Compile).value :: Nil
 
