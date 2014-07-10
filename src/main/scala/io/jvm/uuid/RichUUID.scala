@@ -1,7 +1,13 @@
 package io.jvm
-package object uuid extends Imports {
 
-implicit class RichUUID private[uuid] (val uuid: java.util.UUID) extends AnyVal {
+package object uuid extends Imports {
+  implicit def toRichUUID(uuid: java.util.UUID) =
+    new RichUUID(uuid)
+}
+
+package uuid {
+
+class RichUUID private[uuid] (uuid: java.util.UUID) {
   def string = uuid.toString
 
   def mostSigBits: Long = uuid.getMostSignificantBits

@@ -15,7 +15,7 @@ object StaticUUID {
 
   def apply(uuid: Array[Byte]): UUID = {
     require(uuid ne null, "UUID cannot be created from a null byte array")
-    require(uuid.length == 16, s"Invalid size of input byte array, expected 16 but got ${uuid.length} bytes")
+    require(uuid.length == 16, "Invalid size of input byte array, expected 16 but got " + uuid.length + " bytes")
 
     val ffl = 0xffL
 

@@ -4,13 +4,13 @@ package test
 import org.junit.runner.RunWith
 import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
-import org.scalatest.Matchers
+import org.scalatest.ShouldMatchers
 import org.scalatest.junit.JUnitRunner
 import scala.annotation.tailrec
 
 @RunWith(classOf[JUnitRunner])
 class UUIDFeatureSpec
-    extends FeatureSpec with GivenWhenThen with Matchers {
+    extends FeatureSpec with GivenWhenThen with ShouldMatchers {
 
   val s00000 = "00000000-0000-0000-0000-000000000000"
   val s12345 = "00000001-0002-0003-0004-000000000005"
@@ -104,8 +104,8 @@ class UUIDFeatureSpec
 
   feature("Speed test") {
     scenario("Round trip to and from Array[Byte]") {
-      Given("100 million binary serializations/deserializations")
-      val tries = 100 * 1000 * 1000
+      Given("10 million binary serializations/deserializations")
+      val tries = 10 * 1000 * 1000
 
       When("running on a single 3 Ghz core")
       Then("the checksum should take aprox. a second to finish")
