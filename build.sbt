@@ -8,17 +8,17 @@ organization := "io.jvm"
 
 name := "scala-uuid"
 
-version := "0.1.2"
+version := "0.1.3"
 
-unmanagedSourceDirectories in Compile := (scalaSource in Compile).value :: Nil
+unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 
-unmanagedSourceDirectories in Test := (scalaSource in Test).value :: Nil
+unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 
 // ### DEPENDENCIES ### //
 
 libraryDependencies ++= Seq(
-  "org.scalatest" % "scalatest_2.11.0-M5" % "2.0.M7" % "test"
+  "org.scalatest" %% "scalatest" % "2.2.0" % "test"
 , "junit" % "junit" % "4.11" % "test"
 )
 
@@ -32,48 +32,64 @@ publishTo := Some(
   if (version.value endsWith "SNAPSHOT") ElementSnapshots else ElementReleases
 )
 
-credentials += Credentials(Path.userHome / ".config" / "scala-uuid" / "nexus.config")
+credentials ++= {
+  val creds = Path.userHome / ".config" / "scala-uuid" / "nexus.config"
+  if (creds.exists) Some(Credentials(creds)) else None
+}.toSeq
 
 publishArtifact in (Compile, packageDoc) := false
 
 
 // ### COMPILE SETTINGS ### //
 
-crossScalaVersions := Seq("2.11.0-M6")
+crossScalaVersions := Seq("2.11.1")
 
 scalaVersion := crossScalaVersions.value.head
 
 scalacOptions := Seq(
-  "-unchecked"
-, "-deprecation"
-, "-optimise"
+  "-deprecation"
 , "-encoding", "UTF-8"
-, "-Xcheckinit"
-, "-Yclosure-elim"
-, "-Ydead-code"
-, "-Yinline"
-, "-Xmax-classfile-name", "72"
-, "-Yrepl-sync"
-, "-Xlint"
-, "-Xverify"
-, "-Ywarn-all"
 , "-feature"
-, "-language:postfixOps"
-, "-language:implicitConversions"
 , "-language:existentials"
+, "-language:implicitConversions"
+, "-language:postfixOps"
+, "-language:reflectiveCalls"
+, "-optimise"
+, "-unchecked"
+, "-Xcheckinit"
+, "-Xlint"
+, "-Xmax-classfile-name", "72"
+, "-Xno-forwarders"
+, "-Xverify"
+, "-Yclosure-elim"
+, "-Yconst-opt"
+, "-Ydead-code"
+, "-Yinline-warnings"
+, "-Yinline"
+, "-Yrepl-sync"
+, "-Ywarn-adapted-args"
+, "-Ywarn-dead-code"
+, "-Ywarn-inaccessible"
+, "-Ywarn-infer-any"
+, "-Ywarn-nullary-override"
+, "-Ywarn-nullary-unit"
+, "-Ywarn-numeric-widen"
+, "-Ywarn-unused"
 )
-
-javaHome := sys.env.get("JDK16_HOME").map(file(_))
 
 javacOptions := Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
-, "-Xlint:unchecked"
 , "-source", "1.6"
 , "-target", "1.6"
-)
-
+, "-Xlint:unchecked"
+) ++ (sys.env.get("JDK16_HOME") match {
+  case Some(jdk16Home) => Seq("-bootclasspath", jdk16Home + "/jre/lib/rt.jar")
+  case _ => Nil
+})
 
 // ### ECLIPSE ### //
+
+EclipseKeys.eclipseOutput := Some(".target")
 
 EclipseKeys.executionEnvironment := Some(EclipseExecutionEnvironment.JavaSE16)
