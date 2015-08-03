@@ -1,13 +1,13 @@
 scala-uuid
 ==========
 
-A Scala wrapper for java.util.UUID - inspired by scala-time
+A Scala wrapper for java.util.UUID - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Latest version (0.1.3) has been published against all reasonable versions of Scala:  
+Latest version (0.1.4) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
-**2.10.x**: 2.10.4  
-**2.11.x**: 2.11.1
+**2.10.x**: 2.10.5  
+**2.11.x**: 2.11.7
 
 In order to add the library dependency to your project, add the Element resolver:
 
@@ -15,7 +15,7 @@ In order to add the library dependency to your project, add the Element resolver
 
 And then
 
-    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.3"
+    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.4"
 
 In order to use:
 
