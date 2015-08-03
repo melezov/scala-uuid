@@ -10,7 +10,7 @@ import org.scalatest.junit.JUnitRunner
 class ImportFeatureSpec
     extends FeatureSpec with GivenWhenThen with Matchers {
 
-  feature("scala-uuid functionality can be imported easily"){
+  feature("scala-uuid functionality can be imported easily") {
     scenario("Direct Import") {
       Given("that we want to import the scala-uuid functionality")
 
@@ -22,6 +22,10 @@ class ImportFeatureSpec
 
       And("the static forwarder type should work")
       UUID.random.getClass should be (classOf[UUID])
+
+      And("rich UUID functions should work")
+      val rnd = UUID.random
+      rnd.string should be (rnd.toString)
     }
 
     scenario("Import by extending") {
@@ -35,6 +39,10 @@ class ImportFeatureSpec
 
           And("the static forwarder type should work")
           UUID.random.getClass should be (classOf[UUID])
+
+          And("rich UUID functions should work")
+          val rnd = UUID.random
+          rnd.toString should be (rnd.toString)
         }
       }
 

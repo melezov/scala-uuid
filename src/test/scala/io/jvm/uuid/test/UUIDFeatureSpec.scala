@@ -12,31 +12,28 @@ import scala.annotation.tailrec
 class UUIDFeatureSpec
     extends FeatureSpec with GivenWhenThen with Matchers {
 
-  val s00000 = "00000000-0000-0000-0000-000000000000"
   val s12345 = "00000001-0002-0003-0004-000000000005"
+  val u12345 = UUID.fromString(s12345)
 
-  val u00000 = java.util.UUID.fromString(s00000)
-  val u12345 = java.util.UUID.fromString(s12345)
-
-  feature("Converters (to UUID)"){
-    scenario("From all-zero String") {
-      UUID("0-0-0-0-0") should be (u00000)
+  feature("Converters (to UUID)") {
+    scenario("From 12345 String") {
+      UUID("1-2-3-4-5") should be (u12345)
     }
 
-    scenario("From all-zero msb and lsb Longs") {
-      UUID(0, 0) should be (u00000)
+    scenario("From 123 msb and 45 lsb Longs") {
+      UUID(0x100020003L, 0x4000000000005L) should be (u12345)
     }
 
-    scenario("From all-zero Longs tuple") {
-      UUID((0L, 0L)) should be (u00000)
+    scenario("From (123, 45) Longs tuple") {
+      UUID((0x100020003L, 0x4000000000005L)) should be (u12345)
     }
 
     scenario("From all-zero Array[Byte]") {
-      UUID(new Array[Byte](16)) should be (u00000)
+      UUID(Array[Byte](0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 0, 0, 0, 0, 5)) should be (u12345)
     }
   }
 
-  feature("Converters (from UUID)"){
+  feature("Converters (from UUID)") {
     scenario("To 12345 String") {
       UUID("1-2-3-4-5").string should be (s12345)
     }
@@ -51,11 +48,11 @@ class UUIDFeatureSpec
     }
 
     scenario("To 12345 Array[Byte]") {
-      UUID("1-2-3-4-5").byteArray should be (Array[Byte](0,0,0,1,0,2,0,3,0,4,0,0,0,0,0,5))
+      UUID("1-2-3-4-5").byteArray should be (Array[Byte](0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 0, 0, 0, 0, 5))
     }
   }
 
-  feature("Converters (random round trips)"){
+  feature("Converters (random round trips)") {
     scenario("Round trip to and from a String") {
       val randomUUID = UUID.random
       UUID(randomUUID.string) should be (randomUUID)
@@ -123,8 +120,7 @@ class UUIDFeatureSpec
           val ba = UUID(randomUUIDBytes).byteArray
           val ck = ba(count & 0xf) & 0xffL
           testBinarySpeed(count - 1, checkSum + ck)
-        }
-        else {
+        } else {
           checkSum
         }
       }
