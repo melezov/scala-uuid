@@ -11,7 +11,7 @@ unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### RESOLVERS & DEPENDENCIES ### //
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.2.5" % "test"
+  "org.scalatest" %% "scalatest" % "2.0.M5b" % "test"
 , "junit" % "junit" % "4.12" % "test"
 )
 
@@ -25,35 +25,21 @@ credentials ++= {
 }.toSeq
 
 // ### COMPILE SETTINGS ### //
-crossScalaVersions := Seq("2.10.5")
+crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2", "2.9.3")
 scalaVersion := crossScalaVersions.value.head
 
 scalacOptions := Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
-, "-feature"
-, "-language:existentials"
-, "-language:implicitConversions"
-, "-language:postfixOps"
-, "-language:reflectiveCalls"
 , "-optimise"
 , "-unchecked"
 , "-Xcheckinit"
-, "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
-, "-Xverify"
 , "-Yclosure-elim"
 , "-Ydead-code"
-, "-Yinline-warnings"
 , "-Yinline"
-, "-Yrepl-sync"
-, "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
-, "-Ywarn-inaccessible"
-, "-Ywarn-nullary-override"
-, "-Ywarn-nullary-unit"
-, "-Ywarn-numeric-widen"
 )
 
 // ### ECLIPSE ### //

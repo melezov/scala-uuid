@@ -3,12 +3,12 @@ package com.example.test
 import org.junit.runner.RunWith
 import org.scalatest.FeatureSpec
 import org.scalatest.GivenWhenThen
-import org.scalatest.Matchers
+import org.scalatest.ShouldMatchers
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 class ImportFeatureSpec
-    extends FeatureSpec with GivenWhenThen with Matchers {
+    extends FeatureSpec with GivenWhenThen with ShouldMatchers {
 
   feature("scala-uuid functionality can be imported easily") {
     scenario("Direct Import") {

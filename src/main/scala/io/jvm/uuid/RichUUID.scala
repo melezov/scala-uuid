@@ -1,6 +1,6 @@
 package io.jvm.uuid
 
-class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
+class RichUUID private[uuid] (val uuid: UUID) {
   def string: String = uuid.toString
 
   def mostSigBits: Long = uuid.getMostSignificantBits
