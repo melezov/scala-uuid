@@ -11,7 +11,7 @@ unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### RESOLVERS & DEPENDENCIES ### //
 libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.0.M5b" % "test"
+  "org.scalatest" %% "scalatest" % "1.8" % "test"
 , "junit" % "junit" % "4.12" % "test"
 )
 
@@ -25,7 +25,7 @@ credentials ++= {
 }.toSeq
 
 // ### COMPILE SETTINGS ### //
-crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2", "2.9.3")
+crossScalaVersions := Seq("2.8.1", "2.8.2")
 scalaVersion := crossScalaVersions.value.head
 
 scalacOptions := Seq(
@@ -34,7 +34,6 @@ scalacOptions := Seq(
 , "-optimise"
 , "-unchecked"
 , "-Xcheckinit"
-, "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
 , "-Yclosure-elim"
 , "-Ydead-code"
