@@ -51,11 +51,11 @@ object StaticUUID {
   // --- Forwarders ---
 
   def fromString(name: String): UUID =
-    UUID.fromString(name)
+    java.util.UUID.fromString(name)
 
   def randomUUID(): UUID =
-    UUID.randomUUID()
+    java.util.UUID.randomUUID()
 
   def nameUUIDFromBytes(name: Array[Byte]): UUID =
-    UUID.nameUUIDFromBytes(name)
+    java.util.UUID.nameUUIDFromBytes(name)
 }
