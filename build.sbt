@@ -4,7 +4,7 @@ val ElementSnapshots = "Element Snapshots" at "http://repo.element.hr/nexus/cont
 // ### BASIC SETTINGS ### //
 organization := "io.jvm"
 name := "scala-uuid"
-version := "0.1.4"
+version := "0.1.5"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
