@@ -15,7 +15,7 @@ In order to add the library dependency to your project, add the Element resolver
 
 And then
 
-    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.4"
+    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.5"
 
 In order to use:
 
@@ -26,6 +26,17 @@ You will now have an UUID type and object available:
 
     scala> classOf[UUID]
     res0: Class[io.jvm.uuid.UUID] = class java.util.UUID
+
+*Alternatively*, you can extend `io.jvm.uuid.Imports` and bring the implicits into scope that way:
+
+    scala> object MyClass extends io.jvm.uuid.Imports
+    defined object MyClass
+
+    scala> import MyClass._
+    import MyClass._
+
+    scala> classOf[UUID]
+    res0: Class[MyClass.UUID] = class java.util.UUID
 
 Constructors:
 
@@ -75,5 +86,5 @@ Symmetry:
     scala> val UUID(zeros) = UUID("0-0-0-0-0")
     zeros: String = 00000000-0000-0000-0000-000000000000
 
-For more information, check out the feature spec.  
+For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/test/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
