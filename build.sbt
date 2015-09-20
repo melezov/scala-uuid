@@ -4,17 +4,13 @@ val ElementSnapshots = "Element Snapshots" at "http://repo.element.hr/nexus/cont
 // ### BASIC SETTINGS ### //
 organization := "io.jvm"
 name := "scala-uuid"
-version := "0.1.5"
+version := "0.1.6-SNAPSHOT"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
-// ### RESOLVERS & DEPENDENCIES ### //
-libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "2.2.5" % "test"
-, "junit" % "junit" % "4.12" % "test"
-)
-
+// ### DEPENDENCIES ### //
+libraryDependencies += "org.specs2" %% "specs2-core" % "3.6.4" % "test"
 
 publishTo := Some(if (version.value endsWith "-SNAPSHOT") ElementSnapshots else ElementReleases)
 publishArtifact in (Compile, packageDoc) := false
@@ -25,20 +21,14 @@ credentials ++= {
 }.toSeq
 
 // ### COMPILE SETTINGS ### //
-crossScalaVersions := Seq("2.11.7")
-scalaVersion := crossScalaVersions.value.head
-
+scalaVersion := "2.11.7"
 scalacOptions := Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
 , "-feature"
-, "-language:existentials"
 , "-language:implicitConversions"
-, "-language:postfixOps"
-, "-language:reflectiveCalls"
 , "-optimise"
 , "-unchecked"
-, "-Xcheckinit"
 , "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
@@ -58,6 +48,3 @@ scalacOptions := Seq(
 , "-Ywarn-numeric-widen"
 , "-Ywarn-unused"
 )
-
-// ### ECLIPSE ### //
-EclipseKeys.eclipseOutput := Some(".target")

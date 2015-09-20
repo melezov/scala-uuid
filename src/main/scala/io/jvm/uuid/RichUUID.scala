@@ -31,4 +31,26 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
     , (lsb       ).toByte
     )
   }
+
+  def toByteArray(buffer: Array[Byte]): Unit = {
+    val msb = uuid.getMostSignificantBits
+    val lsb = uuid.getLeastSignificantBits
+
+    buffer( 0) = (msb >>> 56).toByte
+    buffer( 1) = (msb >>> 48).toByte
+    buffer( 2) = (msb >>> 40).toByte
+    buffer( 3) = (msb >>> 32).toByte
+    buffer( 4) = (msb >>> 24).toByte
+    buffer( 5) = (msb >>> 16).toByte
+    buffer( 6) = (msb >>>  8).toByte
+    buffer( 7) = (msb       ).toByte
+    buffer( 8) = (lsb >>> 56).toByte
+    buffer( 9) = (lsb >>> 48).toByte
+    buffer(10) = (lsb >>> 40).toByte
+    buffer(11) = (lsb >>> 32).toByte
+    buffer(12) = (lsb >>> 24).toByte
+    buffer(13) = (lsb >>> 16).toByte
+    buffer(14) = (lsb >>>  8).toByte
+    buffer(15) = (lsb       ).toByte
+  }
 }
