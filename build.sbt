@@ -21,7 +21,7 @@ credentials ++= {
 }.toSeq
 
 // ### COMPILE SETTINGS ### //
-scalaVersion := "2.11.7"
+crossScalaVersions := Seq("2.10.5")
 scalacOptions := Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
@@ -34,7 +34,6 @@ scalacOptions := Seq(
 , "-Xno-forwarders"
 , "-Xverify"
 , "-Yclosure-elim"
-, "-Yconst-opt"
 , "-Ydead-code"
 , "-Yinline-warnings"
 , "-Yinline"
@@ -42,9 +41,7 @@ scalacOptions := Seq(
 , "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
 , "-Ywarn-inaccessible"
-, "-Ywarn-infer-any"
 , "-Ywarn-nullary-override"
 , "-Ywarn-nullary-unit"
 , "-Ywarn-numeric-widen"
-, "-Ywarn-unused"
 )
