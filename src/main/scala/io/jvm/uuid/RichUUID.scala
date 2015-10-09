@@ -1,7 +1,59 @@
 package io.jvm.uuid
 
+private object RichUUID {
+  private val UppercaseLookup = "0123456789ABCDEF".toCharArray
+  private val LowercaseLookup = "0123456789abcdef".toCharArray
+}
+
 class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
-  def string: String = uuid.toString
+  def string: String = toStringViaLookup(RichUUID.LowercaseLookup)
+  def toLowerCase: String = string
+  def toUpperCase: String = toStringViaLookup(RichUUID.UppercaseLookup)
+
+  private def toStringViaLookup(lookup: Array[Char]): String = {
+    val msb = uuid.getMostSignificantBits
+    val lsb = uuid.getLeastSignificantBits
+
+    val msbh = (msb >>> 32).toInt
+    val msbl = msb.toInt
+    val lsbh = (lsb >>> 32).toInt
+    val lsbl = lsb.toInt
+
+    new String(Array(
+      lookup((msbh >>> 28)      )
+    , lookup((msbh >>> 24) & 0xf)
+    , lookup((msbh >>> 20) & 0xf)
+    , lookup((msbh >>> 16) & 0xf)
+    , lookup((msbh >>> 12) & 0xf)
+    , lookup((msbh >>>  8) & 0xf)
+    , lookup((msbh >>>  4) & 0xf)
+    , lookup((msbh       ) & 0xf), '-'
+    , lookup((msbl >>> 28)      )
+    , lookup((msbl >>> 24) & 0xf)
+    , lookup((msbl >>> 20) & 0xf)
+    , lookup((msbl >>> 16) & 0xf), '-'
+    , lookup((msbl >>> 12) & 0xf)
+    , lookup((msbl >>>  8) & 0xf)
+    , lookup((msbl >>>  4) & 0xf)
+    , lookup((msbl       ) & 0xf), '-'
+    , lookup((lsbh >>> 28)      )
+    , lookup((lsbh >>> 24) & 0xf)
+    , lookup((lsbh >>> 20) & 0xf)
+    , lookup((lsbh >>> 16) & 0xf), '-'
+    , lookup((lsbh >>> 12) & 0xf)
+    , lookup((lsbh >>>  8) & 0xf)
+    , lookup((lsbh >>>  4) & 0xf)
+    , lookup((lsbh       ) & 0xf)
+    , lookup((lsbl >>> 28)      )
+    , lookup((lsbl >>> 24) & 0xf)
+    , lookup((lsbl >>> 20) & 0xf)
+    , lookup((lsbl >>> 16) & 0xf)
+    , lookup((lsbl >>> 12) & 0xf)
+    , lookup((lsbl >>>  8) & 0xf)
+    , lookup((lsbl >>>  4) & 0xf)
+    , lookup((lsbl       ) & 0xf)
+    ))
+  }
 
   def mostSigBits: Long = uuid.getMostSignificantBits
   def leastSigBits: Long = uuid.getLeastSignificantBits
@@ -32,25 +84,25 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
     )
   }
 
-  def toByteArray(buffer: Array[Byte]): Unit = {
+  def toByteArray(buffer: Array[Byte], offset: Int): Unit = {
     val msb = uuid.getMostSignificantBits
     val lsb = uuid.getLeastSignificantBits
 
-    buffer( 0) = (msb >>> 56).toByte
-    buffer( 1) = (msb >>> 48).toByte
-    buffer( 2) = (msb >>> 40).toByte
-    buffer( 3) = (msb >>> 32).toByte
-    buffer( 4) = (msb >>> 24).toByte
-    buffer( 5) = (msb >>> 16).toByte
-    buffer( 6) = (msb >>>  8).toByte
-    buffer( 7) = (msb       ).toByte
-    buffer( 8) = (lsb >>> 56).toByte
-    buffer( 9) = (lsb >>> 48).toByte
-    buffer(10) = (lsb >>> 40).toByte
-    buffer(11) = (lsb >>> 32).toByte
-    buffer(12) = (lsb >>> 24).toByte
-    buffer(13) = (lsb >>> 16).toByte
-    buffer(14) = (lsb >>>  8).toByte
-    buffer(15) = (lsb       ).toByte
+    buffer(offset     ) = (msb >>> 56).toByte
+    buffer(offset +  1) = (msb >>> 48).toByte
+    buffer(offset +  2) = (msb >>> 40).toByte
+    buffer(offset +  3) = (msb >>> 32).toByte
+    buffer(offset +  4) = (msb >>> 24).toByte
+    buffer(offset +  5) = (msb >>> 16).toByte
+    buffer(offset +  6) = (msb >>>  8).toByte
+    buffer(offset +  7) = (msb       ).toByte
+    buffer(offset +  8) = (lsb >>> 56).toByte
+    buffer(offset +  9) = (lsb >>> 48).toByte
+    buffer(offset + 10) = (lsb >>> 40).toByte
+    buffer(offset + 11) = (lsb >>> 32).toByte
+    buffer(offset + 12) = (lsb >>> 24).toByte
+    buffer(offset + 13) = (lsb >>> 16).toByte
+    buffer(offset + 14) = (lsb >>>  8).toByte
+    buffer(offset + 15) = (lsb       ).toByte
   }
 }

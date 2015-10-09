@@ -15,9 +15,9 @@ In order to add the library dependency to your project, add the Element resolver
 
 And then
 
-    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.5"
+    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.6"
 
-In order to use:
+#### In order to use:
 
     scala> import io.jvm.uuid._
     import io.jvm.uuid._
@@ -27,7 +27,8 @@ You will now have an UUID type and object available:
     scala> classOf[UUID]
     res0: Class[io.jvm.uuid.UUID] = class java.util.UUID
 
-*Alternatively*, you can extend `io.jvm.uuid.Imports` and bring the implicits into scope that way:
+*Alternatively*, you can extend `io.jvm.uuid.Imports` and bring the implicits into scope that way.  
+This is fairly useful for [importing via (package) objects](https://github.com/melezov/scala-uuid/blob/2.11.x/src/test/scala/com/example/ImportFeatureSpec.scala#L32 "Open ImportFeatureSpec source"):
 
     scala> object MyClass extends io.jvm.uuid.Imports
     defined object MyClass
@@ -38,7 +39,7 @@ You will now have an UUID type and object available:
     scala> classOf[UUID]
     res0: Class[MyClass.UUID] = class java.util.UUID
 
-Constructors:
+#### Constructors:
 
     scala> UUID.random
     res1: io.jvm.uuid.UUID = 5f4bdbef-0417-47a6-ac9e-ffc5a4905f7f
@@ -55,33 +56,60 @@ Constructors:
     scala> UUID(Array[Byte](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16))
     res5: io.jvm.uuid.UUID = 01020304-0506-0708-090a-0b0c0d0e0f10
 
-Accessors:
+There is also a **strict** constructor, which must accept an **exact**, 36 character String representation:
+
+    scala> UUID("11111111-2222-3333-4444-555555555555", true)
+    res6: io.jvm.uuid.UUID = 11111111-2222-3333-4444-555555555555
+
+    scala> UUID("11111111-2222-3333-4444-55555555555", true) // one hexadecimal digit missing
+    java.lang.IllegalArgumentException: requirement failed: UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+      at io.jvm.uuid.StaticUUID$.apply(StaticUUID.scala:19)
+      ... 43 elided
+
+    scala> UUID("11111111-2222-3333-4444-55555555555", false) // false enables legacy behavior
+    res7: io.jvm.uuid.UUID = 11111111-2222-3333-4444-055555555555
+
+#### Accessors:
 
     scala> val foo = UUID.random
     foo: io.jvm.uuid.UUID = bf96f2e0-37c3-4aed-b223-76771aa81a6f
 
     scala> foo.string
-    res6: String = bf96f2e0-37c3-4aed-b223-76771aa81a6f
+    res8: String = bf96f2e0-37c3-4aed-b223-76771aa81a6f
 
     scala> foo.mostSigBits
-    res7: Long = -4641255321136575763
+    res9: Long = -4641255321136575763
 
     scala> foo.leastSigBits formatted "%016x"
-    res8: String = b22376771aa81a6f
+    res10: String = b22376771aa81a6f
 
     scala> val (a, b) = foo.longs
     a: Long = -4641255321136575763
     b: Long = -5610510456853095825
 
     scala> foo.byteArray
-    res9: Array[Byte] = Array(-65, -106, -14, -32, 55, -61, 74, -19, -78, 35, 118, 119, 26, -88, 26, 111)
+    res11: Array[Byte] = Array(-65, -106, -14, -32, 55, -61, 74, -19, -78, 35, 118, 119, 26, -88, 26, 111)
 
-Extractors:
+String accessors are much more optimized than vanilla `toString` ([**3x** speedup](https://github.com/melezov/scala-uuid/blob/2.11.x/src/main/scala/io/jvm/uuid/RichUUID.scala#L13 "Open RichUUID.scala source")), and come in two flavors:
 
-    scala> "9-9-9-9-9" match { case UUID(x) => x }
-    res10: io.jvm.uuid.UUID = 00000009-0009-0009-0009-000000000009
+    scala> foo.string // lower-case by default
+    res12: String = bf96f2e0-37c3-4aed-b223-76771aa81a6f
 
-Symmetry:
+    scala> foo.toLowerCase // explicitly lower-case
+    res13: String = bf96f2e0-37c3-4aed-b223-76771aa81a6f
+
+    scala> foo.toUpperCase // explicitly upper case
+    res14: String = BF96F2E0-37C3-4AED-B223-76771AA81A6F
+
+#### Extractors:
+Take care that the default unapply operates in **strict** mode, to allow for the use case of extracting URL parameters:
+
+    scala> val UUID(uuid) = "00010002-0003-0004-0005-000600070008"
+    uuid: io.jvm.uuid.UUID = 00010002-0003-0004-0005-000600070008
+
+    scala> val UUID(uuid) = "00010002-0003-0004-0005-00060007008" // missing hexadecimal digit
+      scala.MatchError: 00010002-0003-0004-0005-00060007008 (of class java.lang.String)
+      ... 43 elided
 
     scala> val UUID(zeros) = UUID("0-0-0-0-0")
     zeros: String = 00000000-0000-0000-0000-000000000000
