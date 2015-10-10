@@ -7,3 +7,5 @@
 
 project
 target
+
+private.sbt

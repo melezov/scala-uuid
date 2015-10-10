@@ -1,34 +1,35 @@
-scala-uuid
-==========
+# scala-uuid
+[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.11.x)](https://travis-ci.org/melezov/scala-uuid)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.11)
+[![Scaladoc](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.11.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.11)
 
 A Scala wrapper for java.util.UUID - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Latest version (0.1.6) has been published against all reasonable versions of Scala:  
+Latest version (0.1.7) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
-**2.10.x**: 2.10.5  
+**2.10.x**: 2.10.6  
 **2.11.x**: 2.11.7
 
-In order to add the library dependency to your project, add the Element resolver:
+#### Installation:
 
-    resolvers += "Element Releases" at "http://repo.element.hr/nexus/content/repositories/releases/"
+**scala-uuid** is being published to OSSRH / Maven Central and should be available without adding additional repositories.  
+To add the library dependency to your project, simply add:
 
-And then
-
-    libraryDependencies += "io.jvm" %% "scala-uuid" % "0.1.6"
+    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.1.7"
 
 #### In order to use:
 
     scala> import io.jvm.uuid._
     import io.jvm.uuid._
 
-You will now have an UUID type and object available:
+You will now have the `UUID` type and object available:
 
     scala> classOf[UUID]
     res0: Class[io.jvm.uuid.UUID] = class java.util.UUID
 
 *Alternatively*, you can extend `io.jvm.uuid.Imports` and bring the implicits into scope that way.  
-This is fairly useful for [importing via (package) objects](https://github.com/melezov/scala-uuid/blob/2.11.x/src/test/scala/com/example/ImportFeatureSpec.scala#L32 "Open ImportFeatureSpec source"):
+This is fairly useful for [importing via (package) objects](src/test/scala/com/example/ImportFeatureSpec.scala#L32 "Open ImportFeatureSpec source"):
 
     scala> object MyClass extends io.jvm.uuid.Imports
     defined object MyClass
@@ -56,7 +57,7 @@ This is fairly useful for [importing via (package) objects](https://github.com/m
     scala> UUID(Array[Byte](1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16))
     res5: io.jvm.uuid.UUID = 01020304-0506-0708-090a-0b0c0d0e0f10
 
-There is also a **strict** constructor, which must accept an **exact**, 36 character String representation:
+There is also a [**strict** constructor](src/main/scala/io/jvm/uuid/StaticUUID.scala#L18 "Open StaticUUID source"), which must accept an **exact**, 36 character String representation:
 
     scala> UUID("11111111-2222-3333-4444-555555555555", true)
     res6: io.jvm.uuid.UUID = 11111111-2222-3333-4444-555555555555
@@ -90,7 +91,7 @@ There is also a **strict** constructor, which must accept an **exact**, 36 chara
     scala> foo.byteArray
     res11: Array[Byte] = Array(-65, -106, -14, -32, 55, -61, 74, -19, -78, 35, 118, 119, 26, -88, 26, 111)
 
-String accessors are much more optimized than vanilla `toString` ([**3x** speedup](https://github.com/melezov/scala-uuid/blob/2.11.x/src/main/scala/io/jvm/uuid/RichUUID.scala#L13 "Open RichUUID.scala source")), and come in two flavors:
+String accessors are much more optimized than vanilla `toString` ([**3x** speedup](src/main/scala/io/jvm/uuid/RichUUID.scala#L13 "Open RichUUID.scala source")), and come in two flavors:
 
     scala> foo.string // lower-case by default
     res12: String = bf96f2e0-37c3-4aed-b223-76771aa81a6f
@@ -102,7 +103,7 @@ String accessors are much more optimized than vanilla `toString` ([**3x** speedu
     res14: String = BF96F2E0-37C3-4AED-B223-76771AA81A6F
 
 #### Extractors:
-Take care that the default unapply operates in **strict** mode, to allow for the use case of extracting URL parameters:
+Take care when using the unapply excractor to notice that it operates in **strict** mode, to allow for the use case of extracting URL parameters:
 
     scala> val UUID(uuid) = "00010002-0003-0004-0005-000600070008"
     uuid: io.jvm.uuid.UUID = 00010002-0003-0004-0005-000600070008
@@ -114,5 +115,5 @@ Take care that the default unapply operates in **strict** mode, to allow for the
     scala> val UUID(zeros) = UUID("0-0-0-0-0")
     zeros: String = 00000000-0000-0000-0000-000000000000
 
-For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/test/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
+For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
