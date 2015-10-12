@@ -5,7 +5,7 @@ private object RichUUID {
   private val LowercaseLookup = "0123456789abcdef".toCharArray
 }
 
-class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
+class RichUUID private[uuid] (val uuid: UUID) {
   def string: String = toStringViaLookup(RichUUID.LowercaseLookup)
   def toLowerCase: String = string
   def toUpperCase: String = toStringViaLookup(RichUUID.UppercaseLookup)
