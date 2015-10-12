@@ -71,7 +71,7 @@ object StaticUUID {
       new UUID(msbh | msbl, lsbh | lsbl)
     } catch {
       case _: ArrayIndexOutOfBoundsException =>
-        sys.error("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit")
+        error("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit")
     }
   } else {
     UUID.fromString(uuid)

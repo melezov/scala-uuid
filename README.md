@@ -1,7 +1,7 @@
 # scala-uuid
-[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.9.x)](https://travis-ci.org/melezov/scala-uuid)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.9.3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.9.3)
-[![Scaladoc](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.9.3.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.9.3)
+[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.8.x)](https://travis-ci.org/melezov/scala-uuid)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.8.2/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.8.2)
+[![Scaladoc](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.8.2.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.8.2)
 
 A Scala wrapper for java.util.UUID - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
