@@ -4,6 +4,6 @@ trait Imports {
   type UUID = java.util.UUID
   val UUID = StaticUUID
 
-  implicit def richUUID(uuid: UUID) =
+  implicit def toRichUUID(uuid: UUID): RichUUID =
     new RichUUID(uuid)
 }

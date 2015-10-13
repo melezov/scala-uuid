@@ -5,7 +5,6 @@
 .settings
 .target
 
-project
 target
 
 private.sbt

@@ -1,9 +1,12 @@
 # scala-uuid
 [![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.11.x)](https://travis-ci.org/melezov/scala-uuid)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.11)
-[![Scaladoc](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.11.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.11)
+[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.11.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.11)
+[![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.11.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.11.x)
+[![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
-A Scala wrapper for java.util.UUID - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
+A Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
 Latest version (0.1.7) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
@@ -16,7 +19,9 @@ Latest version (0.1.7) has been published against all reasonable versions of Sca
 **scala-uuid** is being published to OSSRH / Maven Central and should be available without adding additional repositories.  
 To add the library dependency to your project, simply add:
 
+```scala
     libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.1.7"
+```
 
 #### In order to use:
 
@@ -112,8 +117,8 @@ Take care when using the unapply excractor to notice that it operates in **stric
       scala.MatchError: 00010002-0003-0004-0005-00060007008 (of class java.lang.String)
       ... 43 elided
 
-    scala> val UUID(zeros) = UUID("0-0-0-0-0")
-    zeros: String = 00000000-0000-0000-0000-000000000000
+    scala> val UUID(zeroes) = UUID("0-0-0-0-0")
+    zeroes: String = 00000000-0000-0000-0000-000000000000
 
 For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!

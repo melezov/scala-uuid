@@ -1,6 +1,6 @@
 package io.jvm.uuid
 
-private object RichUUID {
+private[this] object RichUUID {
   private val UppercaseLookup = "0123456789ABCDEF".toCharArray
   private val LowercaseLookup = "0123456789abcdef".toCharArray
 }
@@ -10,7 +10,7 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
   def toLowerCase: String = string
   def toUpperCase: String = toStringViaLookup(RichUUID.UppercaseLookup)
 
-  private def toStringViaLookup(lookup: Array[Char]): String = {
+  private[this] def toStringViaLookup(lookup: Array[Char]): String = {
     val msb = uuid.getMostSignificantBits
     val lsb = uuid.getLeastSignificantBits
 

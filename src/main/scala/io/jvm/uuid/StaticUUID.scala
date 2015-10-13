@@ -7,7 +7,7 @@ object StaticUUID {
   def apply(uuid: String): UUID =
     UUID.fromString(uuid)
 
-  private val Lookup = {
+  private[this] val Lookup = {
     val buffer = new Array[Int]('f' + 1)
     ('0' to '9') foreach { ch => buffer(ch.toInt) = ch - '0' }
     ('A' to 'F') foreach { ch => buffer(ch.toInt) = ch - 'A' + 10 }
@@ -80,11 +80,11 @@ object StaticUUID {
   def apply(mostSigBits: Long, leastSigBits: Long): UUID =
     new UUID(mostSigBits, leastSigBits)
 
-  def apply(bits: (Long, Long)): UUID =
+  def apply(bits: (Long, Long)): UUID = {
     new UUID(bits._1, bits._2)
+  }
 
   def apply(uuid: Array[Byte]): UUID = {
-    require(uuid ne null, "UUID cannot be created from a null byte array")
     require(uuid.length == 16, s"Invalid size of input byte array, expected 16 but got ${uuid.length} bytes")
 
     apply(

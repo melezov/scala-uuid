@@ -15,3 +15,9 @@ notifications:
   email:
     recipients:
       - marko@mentat-labs.com
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test
+
+after_success:
+  - pip install --user codecov && codecov

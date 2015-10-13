@@ -11,7 +11,7 @@ libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.4" % "test"
 
 // ### COMPILE SETTINGS ### //
 scalaVersion := "2.11.7"
-scalacOptions := Seq(
+scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
 , "-feature"
@@ -37,3 +37,5 @@ scalacOptions := Seq(
 , "-Ywarn-numeric-widen"
 , "-Ywarn-unused"
 )
+
+wartremoverErrors in (Compile, compile) ++= Warts.all
