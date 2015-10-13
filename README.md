@@ -6,7 +6,7 @@
 [![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.11.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.11.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
-A Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
+An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
 Latest version (0.1.7) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  

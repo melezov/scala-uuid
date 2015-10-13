@@ -1,0 +1,7 @@
+scala-uuid 0.1.7 is out, now published to **Maven Central**
+
+### Changes:
+
+* New "strict" factory which must accept exactly 36 characters
+* Optimized replacement for `toString` (3x speedup over vanilla `toString`)
+* Added ScalaCheck for property roundtrip testing
