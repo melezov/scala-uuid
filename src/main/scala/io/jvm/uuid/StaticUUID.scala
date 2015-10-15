@@ -9,70 +9,19 @@ object StaticUUID {
 
   private[this] val Lookup = {
     val buffer = new Array[Int]('f' + 1)
-    ('0' to '9') foreach { ch => buffer(ch.toInt) = ch - '0' }
-    ('A' to 'F') foreach { ch => buffer(ch.toInt) = ch - 'A' + 10 }
-    ('a' to 'f') foreach { ch => buffer(ch.toInt) = ch - 'a' + 10 }
+    for (i <- 0 to 'f') {
+      buffer(i) =
+        if (i >= '0' && i <= '9') i - '0'
+        else if (i >= 'A' && i <= 'F') i - 'A' + 10
+        else if (i >= 'a' && i <= 'f') i - 'a' + 10
+        else -1
+    }
     buffer
   }
 
   def apply(uuid: String, strict: Boolean): UUID = if (strict) {
-    require(
-      uuid.length == 36 &&
-      uuid.charAt( 8) == '-' &&
-      uuid.charAt(13) == '-' &&
-      uuid.charAt(18) == '-' &&
-      uuid.charAt(23) == '-', "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx")
-
-    try {
-      val msbh = (
-        (Lookup(uuid.charAt( 0).toInt) << 28)
-      | (Lookup(uuid.charAt( 1).toInt) << 24)
-      | (Lookup(uuid.charAt( 2).toInt) << 20)
-      | (Lookup(uuid.charAt( 3).toInt) << 16)
-      | (Lookup(uuid.charAt( 4).toInt) << 12)
-      | (Lookup(uuid.charAt( 5).toInt) <<  8)
-      | (Lookup(uuid.charAt( 6).toInt) <<  4)
-      | (Lookup(uuid.charAt( 7).toInt)      )
-      ).toLong << 32
-
-      val msbl = (
-        (Lookup(uuid.charAt( 9).toInt) << 28)
-      | (Lookup(uuid.charAt(10).toInt) << 24)
-      | (Lookup(uuid.charAt(11).toInt) << 20)
-      | (Lookup(uuid.charAt(12).toInt) << 16)
-      | (Lookup(uuid.charAt(14).toInt) << 12)
-      | (Lookup(uuid.charAt(15).toInt) <<  8)
-      | (Lookup(uuid.charAt(16).toInt) <<  4)
-      | (Lookup(uuid.charAt(17).toInt)      )
-      ) & 0xffffffffL
-
-      val lsbh = (
-        (Lookup(uuid.charAt(19).toInt) << 28)
-      | (Lookup(uuid.charAt(20).toInt) << 24)
-      | (Lookup(uuid.charAt(21).toInt) << 20)
-      | (Lookup(uuid.charAt(22).toInt) << 16)
-      | (Lookup(uuid.charAt(24).toInt) << 12)
-      | (Lookup(uuid.charAt(25).toInt) <<  8)
-      | (Lookup(uuid.charAt(26).toInt) <<  4)
-      | (Lookup(uuid.charAt(27).toInt)      )
-      ).toLong << 32
-
-      val lsbl = (
-        (Lookup(uuid.charAt(28).toInt) << 28)
-      | (Lookup(uuid.charAt(29).toInt) << 24)
-      | (Lookup(uuid.charAt(30).toInt) << 20)
-      | (Lookup(uuid.charAt(31).toInt) << 16)
-      | (Lookup(uuid.charAt(32).toInt) << 12)
-      | (Lookup(uuid.charAt(33).toInt) <<  8)
-      | (Lookup(uuid.charAt(34).toInt) <<  4)
-      | (Lookup(uuid.charAt(35).toInt)      )
-      ) & 0xffffffffL
-
-      new UUID(msbh | msbl, lsbh | lsbl)
-    } catch {
-      case _: ArrayIndexOutOfBoundsException =>
-        sys.error("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit")
-    }
+    unapply(uuid).getOrElse(throw new IllegalArgumentException(
+      s"UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: ${uuid})"))
   } else {
     UUID.fromString(uuid)
   }
@@ -86,8 +35,7 @@ object StaticUUID {
 
   def apply(uuid: Array[Byte]): UUID = {
     require(uuid.length == 16, s"Invalid size of input byte array, expected 16 but got ${uuid.length} bytes")
-
-    apply(
+    new UUID(
       (uuid( 0)       ).toLong << 56
     | (uuid( 1) & 0xff).toLong << 48
     | (uuid( 2) & 0xff).toLong << 40
@@ -108,13 +56,81 @@ object StaticUUID {
   }
 
   /** UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx */
-  def unapply(uuid: String): Option[UUID] =
-    try {
-      Some(apply(uuid, true))
+  def unapply(uuid: String): Option[UUID] = {
+    if (uuid.length != 36 ||
+        uuid.charAt( 8) != '-' ||
+        uuid.charAt(13) != '-' ||
+        uuid.charAt(18) != '-' ||
+        uuid.charAt(23) != '-') {
+      None
+    } else try {
+      val msb3 = (
+        (Lookup(uuid.charAt( 0).toInt) << 12)
+      | (Lookup(uuid.charAt( 1).toInt) <<  8)
+      | (Lookup(uuid.charAt( 2).toInt) <<  4)
+      | (Lookup(uuid.charAt( 3).toInt)      )
+      )
+
+      val msb2 = (
+        (Lookup(uuid.charAt( 4).toInt) << 12)
+      | (Lookup(uuid.charAt( 5).toInt) <<  8)
+      | (Lookup(uuid.charAt( 6).toInt) <<  4)
+      | (Lookup(uuid.charAt( 7).toInt)      )
+      )
+
+      val msb1 = (
+        (Lookup(uuid.charAt( 9).toInt) << 12)
+      | (Lookup(uuid.charAt(10).toInt) <<  8)
+      | (Lookup(uuid.charAt(11).toInt) <<  4)
+      | (Lookup(uuid.charAt(12).toInt)      )
+      )
+
+      val msb0 = (
+        (Lookup(uuid.charAt(14).toInt) << 12)
+      | (Lookup(uuid.charAt(15).toInt) <<  8)
+      | (Lookup(uuid.charAt(16).toInt) <<  4)
+      | (Lookup(uuid.charAt(17).toInt)      )
+      )
+
+      val lsb3 = (
+        (Lookup(uuid.charAt(19).toInt) << 12)
+      | (Lookup(uuid.charAt(20).toInt) <<  8)
+      | (Lookup(uuid.charAt(21).toInt) <<  4)
+      | (Lookup(uuid.charAt(22).toInt)      )
+      )
+
+      val lsb2 = (
+        (Lookup(uuid.charAt(24).toInt) << 12)
+      | (Lookup(uuid.charAt(25).toInt) <<  8)
+      | (Lookup(uuid.charAt(26).toInt) <<  4)
+      | (Lookup(uuid.charAt(27).toInt)      )
+      )
+
+      val lsb1 = (
+        (Lookup(uuid.charAt(28).toInt) << 12)
+      | (Lookup(uuid.charAt(29).toInt) <<  8)
+      | (Lookup(uuid.charAt(30).toInt) <<  4)
+      | (Lookup(uuid.charAt(31).toInt)      )
+      )
+
+      val lsb0 = (
+        (Lookup(uuid.charAt(32).toInt) << 12)
+      | (Lookup(uuid.charAt(33).toInt) <<  8)
+      | (Lookup(uuid.charAt(34).toInt) <<  4)
+      | (Lookup(uuid.charAt(35).toInt)      )
+      )
+
+      if ((msb3 | msb2 | msb1 | msb0 | lsb3 | lsb2 | lsb1 | lsb0) < 0) None else {
+        Some(new UUID(
+          (((msb3 << 16) | msb2).toLong << 32) | (msb1.toLong << 16) | msb0
+        , (((lsb3 << 16) | lsb2).toLong << 32) | (lsb1.toLong << 16) | lsb0
+        ))
+      }
     } catch {
-      case _: Exception =>
+      case _: ArrayIndexOutOfBoundsException =>
         None
     }
+  }
 
   def unapply(uuid: UUID): Option[String] =
     Some(uuid.string)

@@ -1,7 +1,7 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.1.7"
+version := "0.1.8-SNAPSHOT"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
@@ -38,4 +38,4 @@ scalacOptions ++= Seq(
 , "-Ywarn-unused"
 )
 
-wartremoverErrors in (Compile, compile) ++= Warts.all
+wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw)

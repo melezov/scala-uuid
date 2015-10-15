@@ -14,6 +14,7 @@ class UUIDFeatureSpec
     from two longs                     $fromTwoLongs
     from longs tuple                   $fromLongsTuple
     from byte array                    $fromByteArray
+    from byte array (failure)          $fromByteArrayFailure
 
   Accessors
     to string                          $toDefaultCaseString
@@ -26,6 +27,7 @@ class UUIDFeatureSpec
   Extractors
     string extractor                   $stringExtractor
     uuid extractor                     $uuidExtractor
+    uuid extractor (failure)           $uuidExtractorFailure
 """
 
   private val u159bf = java.util.UUID.fromString("1-5-9-b-f")
@@ -52,6 +54,10 @@ class UUIDFeatureSpec
 
   def fromByteArray =
     UUID(Array[Byte](0, 0, 0, 1, 0, 5, 0, 9, 0, 0xb, 0, 0, 0, 0, 0, 0xf)) === u159bf
+
+  def fromByteArrayFailure = Try {
+    UUID(new Array[Byte](17))
+  } isFailure
 
   // -- Accessors --
 
@@ -84,5 +90,12 @@ class UUIDFeatureSpec
   def uuidExtractor = {
     val UUID(uuidValue) = "00000001-0005-0009-000b-00000000000f" // will fail if not strict!
     uuidValue === UUID("1-5-9-b-f")
+  }
+
+  def uuidExtractorFailure = {
+    "1-5-9-b-f" match {
+      case UUID(uuid) => sys.error("Should not match - it wasn't strict!")
+      case _ => true
+    }
   }
 }

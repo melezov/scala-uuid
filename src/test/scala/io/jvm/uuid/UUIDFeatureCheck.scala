@@ -1,8 +1,11 @@
 package io.jvm.uuid
 
+import java.security.MessageDigest
 import java.util.Locale
-import org.specs2._
+
 import org.scalacheck._
+import org.specs2._
+
 import scala.util._
 
 class UUIDFeatureCheck
@@ -18,10 +21,16 @@ class UUIDFeatureCheck
     legacy strict string          $legacyStrictString
     legacy non-strict string      $legacyNonStrictString
     strict string with check      $strictStringWithCheck
+    strict string (failure)       $strictStringFailure
     non-strict string with check  $nonStrictStringWithCheck
 
   Byte array roundtrips
     byte array                    $byteArray
+    to byte array                 $toByteArray
+
+  Version conformism
+    random is version 4           $randomIsVersion4
+    naming is version 3           $namingIsVersion3
 """
 
   /* Long roundtrips */
@@ -70,17 +79,35 @@ class UUIDFeatureCheck
   } yield s"$w0-$w1-$w2-$w3-$w4"
 
   def legacyStrictString = Prop.forAllNoShrink(strictStringGen) { ss =>
-    UUID(ss).toString === ss.toLowerCase(Locale.ENGLISH)
+    UUID(ss).toString === ss.toLowerCase(Locale.ENGLISH) &&
+    UUID(ss, false).toString === ss.toLowerCase(Locale.ENGLISH)
   }
 
   def legacyNonStrictString = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
     val w0 :: w1 :: w2 :: w3 :: w4 :: Nil = nss.split("-").toList
     val ss = s"${w0.untrim(8)}-${w1.untrim(4)}-${w2.untrim(4)}-${w3.untrim(4)}-${w4.untrim(12)}"
-    UUID(nss).toString === ss.toLowerCase(Locale.ENGLISH)
+    UUID(nss).toString === ss.toLowerCase(Locale.ENGLISH) &&
+    UUID(nss, false).toString === ss.toLowerCase(Locale.ENGLISH)
   }
 
   def strictStringWithCheck = Prop.forAllNoShrink(strictStringGen) { ss =>
     UUID(ss, true).string === ss.toLowerCase(Locale.ENGLISH)
+  }
+
+  private val placeInStrictStringGen = Gen.choose(0, UUID.random.string.length - 1)
+  private val nonHexUpperCharGen = Gen.choose('G', 'Z')
+  private val nonHexLowerCharGen = nonHexUpperCharGen.map(_.toLower)
+  private val nonHexCharGen = Gen.oneOf(nonHexUpperCharGen, nonHexLowerCharGen)
+
+  private val invalidStrictStringGen = for {
+    ss <- strictStringGen
+    index <- placeInStrictStringGen
+    lower <- nonHexCharGen
+  } yield ss.updated(index, lower)
+
+  // Tests parsing which produces ArrayIndexOutOfBoundsException
+  def strictStringFailure = Prop.forAllNoShrink(invalidStrictStringGen) { iss =>
+    Try { UUID(iss, true) } isFailure
   }
 
   def nonStrictStringWithCheck = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
@@ -101,5 +128,35 @@ class UUIDFeatureCheck
 
   def byteArray = Prop.forAllNoShrink(byteArrayGen) { ba =>
     UUID(ba).byteArray === ba
+  }
+
+  def toByteArray = Prop.forAllNoShrink(byteArrayGen) { ba =>
+    val buffer = new Array[Byte](18)
+    UUID(ba).toByteArray(buffer, 1)
+    buffer.tail.init === ba
+  }
+
+  /* Version conformism */
+
+  /** Random conforms to version 4 spec:
+    * xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx where x is any hexadecimal digit and y is one of 8, 9, A, or B */
+  def randomIsVersion4 = Prop.forAll() { _ =>
+    val uuid = UUID.random
+    val version = (uuid.getMostSignificantBits >>> 12) & 0xF
+    val variant = uuid.getLeastSignificantBits >>> 62
+    version === 4 && variant === 2
+  }
+
+  /** Naming conforms to version 3 spec:
+    * xxxxxxxx-xxxx-3xxx-yxxx-xxxxxxxxxxxx where x is any hexadecimal digit and y is one of 8, 9, A, or B */
+  def namingIsVersion3 = Prop.forAllNoShrink(byteArrayGen) { ba =>
+    val uuid = UUID.nameUUIDFromBytes(ba)
+    val version = (uuid.getMostSignificantBits >>> 12) & 0xF
+    val variant = uuid.getLeastSignificantBits >>> 62
+    version === 3 && variant === 2 && {
+      val reconstruct = UUID(MessageDigest.getInstance("MD5").digest(ba))
+      (reconstruct.mostSigBits & ~0xF000L) === (uuid.mostSigBits & ~0xF000L) &&
+      (reconstruct.leastSigBits & ~0xC000000000000000L) === (uuid.leastSigBits & ~0xC000000000000000L) // cool :)
+    }
   }
 }
