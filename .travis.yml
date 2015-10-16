@@ -17,7 +17,7 @@ notifications:
       - marko@mentat-labs.com
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION coverage test
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test publishLocal
 
 after_success:
   - pip install --user codecov && codecov

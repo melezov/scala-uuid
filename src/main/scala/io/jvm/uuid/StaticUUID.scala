@@ -1,13 +1,119 @@
 package io.jvm.uuid
 
-object StaticUUID {
-  def random: UUID =
-    UUID.randomUUID()
+/** Singleton object to be bound with the `UUID` value in the package object. */
+object StaticUUID extends StaticUUID
 
-  def apply(uuid: String): UUID =
-    UUID.fromString(uuid)
+/** This class holds all static forwarders and `UUID` factories.
+  *
+  * Extend this class from the client code in order to add new functionality to the library. */
+class StaticUUID {
+  /** Generates a random `UUID` (type 4) using a cryptographically strong pseudo random number generator. */
+  @inline final def random: UUID =
+    randomUUID()
 
-  private[this] val Lookup = {
+  /** Creates a new `UUID` by concatenating two 64-bit values.
+    * @param  mostSigBits Most significant bits of the new `UUID`
+    * @param  leastSigBits Least significant bits of the new `UUID` */
+  @inline final def apply(mostSigBits: Long, leastSigBits: Long): UUID =
+    new UUID(mostSigBits, leastSigBits)
+
+  /** Helper length checker which will be inlined into `UUID` factories. */
+  @inline private[this] def lengthCheck(tpe: String, expected: Int, actual: Int): Unit =
+    if (expected != actual) throwInvalidLength(tpe, expected, actual)
+
+  /** Throws an exception because there was a length mismatch.
+    * If the actual length was greater than what was expected, suggests using the alternative constructor. */
+  private[this] def throwInvalidLength(tpe: String, expected: Int, actual: Int): Nothing =
+    throw new IllegalArgumentException(s"Expecting a${if (tpe == "int") "n" else ""} ${tpe} array of length ${expected}, but length was ${actual}${
+      if (actual < expected) " (too short)" else s"; if you wish to skip this check use UUID.from${tpe.head.toUpper + tpe.tail}Array instead!"
+    }")
+
+  /** Creates a new `UUID` by concatenating two 64-bit values.
+    * @throws  IllegalArgumentException In case `buffer.length` != 2 */
+  final def apply(buffer: Array[Long]): UUID = {
+    lengthCheck("long", 2, buffer.length)
+    fromLongArray(buffer, 0)
+  }
+
+  /** Creates a new `UUID` by concatenating two 64-bit values.
+    * @param  offset Offset of the most significant `Long` inside the array. */
+  @inline final def fromLongArray(buffer: Array[Long], offset: Int): UUID =
+    UUID(
+      buffer(offset    )
+    , buffer(offset + 1)
+    )
+
+  /** Creates a new `UUID` by concatenating four 32-bit values.
+    * @throws  IllegalArgumentException In case `buffer.length != 4` */
+  final def apply(buffer: Array[Int]): UUID = {
+    lengthCheck("int", 4, buffer.length)
+    fromIntArray(buffer, 0)
+  }
+
+  /** Creates a new `UUID` by concatenating four 32-bit values.
+    * @param  offset Offset of the most significant `Int` inside the array. */
+  @inline final def fromIntArray(buffer: Array[Int], offset: Int): UUID = {
+    UUID(
+      (buffer(offset    ).toLong) << 32
+    | (buffer(offset + 1) & 0xffffffffL)
+    , (buffer(offset + 2).toLong) << 32
+    | (buffer(offset + 3) & 0xffffffffL)
+    )
+  }
+
+  /** Creates a new `UUID` by concatenating eight 16-bit values.
+    * @throws  IllegalArgumentException In case `buffer.length != 8` */
+  final def apply(buffer: Array[Short]): UUID = {
+    lengthCheck("short", 8, buffer.length)
+    fromShortArray(buffer, 0)
+  }
+
+  /** Creates a new `UUID` by concatenating eight 16-bit values.
+    * @param  offset Offset of the most significant `Short` inside the array. */
+  @inline final def fromShortArray(buffer: Array[Short], offset: Int): UUID =
+    UUID(
+      (buffer(offset    )          ).toLong << 48
+    | (buffer(offset + 1) & 0xffffL)        << 32
+    | (buffer(offset + 2) & 0xffffL)        << 16
+    | (buffer(offset + 3) & 0xffffL)
+    , (buffer(offset + 4)          ).toLong << 48
+    | (buffer(offset + 5) & 0xffffL)        << 32
+    | (buffer(offset + 6) & 0xffffL)        << 16
+    | (buffer(offset + 7) & 0xffffL)
+    )
+
+  /** Creates a new `UUID` by concatenating 16 bytes.
+    * @throws  IllegalArgumentException In case `buffer.length != 16` */
+  final def apply(buffer: Array[Byte]): UUID = {
+    lengthCheck("byte", 16, buffer.length)
+    fromByteArray(buffer, 0)
+  }
+
+  /** Creates a new `UUID` by concatenating 16 bytes.
+    * @param  offset Offset of the most significant `Byte` inside the array. */
+  @inline final def fromByteArray(buffer: Array[Byte], offset: Int): UUID =
+    UUID(
+      (buffer(offset     )       ).toLong << 56
+    | (buffer(offset +  1) & 0xff).toLong << 48
+    | (buffer(offset +  2) & 0xff).toLong << 40
+    | (buffer(offset +  3) & 0xff).toLong << 32
+    | (buffer(offset +  4) & 0xff).toLong << 24
+    | (buffer(offset +  5) & 0xff)        << 16
+    | (buffer(offset +  6) & 0xff)        <<  8
+    | (buffer(offset +  7) & 0xff)
+    , (buffer(offset +  8)       ).toLong << 56
+    | (buffer(offset +  9) & 0xff).toLong << 48
+    | (buffer(offset + 10) & 0xff).toLong << 40
+    | (buffer(offset + 11) & 0xff).toLong << 32
+    | (buffer(offset + 12) & 0xff).toLong << 24
+    | (buffer(offset + 13) & 0xff)        << 16
+    | (buffer(offset + 14) & 0xff)        <<  8
+    | (buffer(offset + 15) & 0xff)
+    )
+
+  /** Hexadecimal character to integer value mapping used in parser.
+    * Invalid characters are marked with a value of `-1`. */
+  private[this] final val Lookup = {
     val buffer = new Array[Int]('f' + 1)
     for (i <- 0 to 'f') {
       buffer(i) =
@@ -19,130 +125,123 @@ object StaticUUID {
     buffer
   }
 
-  def apply(uuid: String, strict: Boolean): UUID = if (strict) {
-    unapply(uuid).getOrElse(throw new IllegalArgumentException(
-      s"UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: ${uuid})"))
-  } else {
-    UUID.fromString(uuid)
+  /** Creates a new `UUID` by parsing 36 chars.
+    * @throws  IllegalArgumentException In case `buffer.length != 36` */
+  final def apply(buffer: Array[Char]): UUID = {
+    lengthCheck("char", 36, buffer.length)
+    fromCharArray(buffer, 0)
   }
 
-  def apply(mostSigBits: Long, leastSigBits: Long): UUID =
-    new UUID(mostSigBits, leastSigBits)
-
-  def apply(bits: (Long, Long)): UUID = {
-    new UUID(bits._1, bits._2)
+  /** Creates a new `UUID` by parsing 36 chars in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format.
+    * @param  offset Position of the first `Char` in the array. */
+  @inline final def fromCharArray(buffer: Array[Char], offset: Int): UUID = {
+    val res = fromCharArrayViaLookup(buffer, offset, Lookup)
+	  if (!res.isDefined) throw new IllegalArgumentException("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit")
+    res.get
   }
 
-  def apply(uuid: Array[Byte]): UUID = {
-    require(uuid.length == 16, s"Invalid size of input byte array, expected 16 but got ${uuid.length} bytes")
-    new UUID(
-      (uuid( 0)       ).toLong << 56
-    | (uuid( 1) & 0xff).toLong << 48
-    | (uuid( 2) & 0xff).toLong << 40
-    | (uuid( 3) & 0xff).toLong << 32
-    | (uuid( 4) & 0xff).toLong << 24
-    | (uuid( 5) & 0xff)        << 16
-    | (uuid( 6) & 0xff)        <<  8
-    | (uuid( 7) & 0xff)
-    , (uuid( 8)       ).toLong << 56
-    | (uuid( 9) & 0xff).toLong << 48
-    | (uuid(10) & 0xff).toLong << 40
-    | (uuid(11) & 0xff).toLong << 32
-    | (uuid(12) & 0xff).toLong << 24
-    | (uuid(13) & 0xff)        << 16
-    | (uuid(14) & 0xff)        <<  8
-    | (uuid(15) & 0xff)
+  /** Parses an `UUID` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format from an array of characters, helper utility. */
+  @inline private final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): Option[UUID] = try {
+    val msb3 = (
+      (lookup(buffer(offset +  0).toInt) << 12)
+    | (lookup(buffer(offset +  1).toInt) <<  8)
+    | (lookup(buffer(offset +  2).toInt) <<  4)
+    | (lookup(buffer(offset +  3).toInt)      )
     )
-  }
 
-  /** UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx */
-  def unapply(uuid: String): Option[UUID] = {
-    if (uuid.length != 36 ||
-        uuid.charAt( 8) != '-' ||
-        uuid.charAt(13) != '-' ||
-        uuid.charAt(18) != '-' ||
-        uuid.charAt(23) != '-') {
-      None
-    } else try {
-      val msb3 = (
-        (Lookup(uuid.charAt( 0).toInt) << 12)
-      | (Lookup(uuid.charAt( 1).toInt) <<  8)
-      | (Lookup(uuid.charAt( 2).toInt) <<  4)
-      | (Lookup(uuid.charAt( 3).toInt)      )
-      )
+    val msb2 = (
+      (lookup(buffer(offset +  4).toInt) << 12)
+    | (lookup(buffer(offset +  5).toInt) <<  8)
+    | (lookup(buffer(offset +  6).toInt) <<  4)
+    | (lookup(buffer(offset +  7).toInt)      )
+    )
 
-      val msb2 = (
-        (Lookup(uuid.charAt( 4).toInt) << 12)
-      | (Lookup(uuid.charAt( 5).toInt) <<  8)
-      | (Lookup(uuid.charAt( 6).toInt) <<  4)
-      | (Lookup(uuid.charAt( 7).toInt)      )
-      )
+    val msb1 = (
+      (lookup(buffer(offset +  9).toInt) << 12)
+    | (lookup(buffer(offset + 10).toInt) <<  8)
+    | (lookup(buffer(offset + 11).toInt) <<  4)
+    | (lookup(buffer(offset + 12).toInt)      )
+    )
 
-      val msb1 = (
-        (Lookup(uuid.charAt( 9).toInt) << 12)
-      | (Lookup(uuid.charAt(10).toInt) <<  8)
-      | (Lookup(uuid.charAt(11).toInt) <<  4)
-      | (Lookup(uuid.charAt(12).toInt)      )
-      )
+    val msb0 = (
+      (lookup(buffer(offset + 14).toInt) << 12)
+    | (lookup(buffer(offset + 15).toInt) <<  8)
+    | (lookup(buffer(offset + 16).toInt) <<  4)
+    | (lookup(buffer(offset + 17).toInt)      )
+    )
 
-      val msb0 = (
-        (Lookup(uuid.charAt(14).toInt) << 12)
-      | (Lookup(uuid.charAt(15).toInt) <<  8)
-      | (Lookup(uuid.charAt(16).toInt) <<  4)
-      | (Lookup(uuid.charAt(17).toInt)      )
-      )
+    val lsb3 = (
+      (lookup(buffer(offset + 19).toInt) << 12)
+    | (lookup(buffer(offset + 20).toInt) <<  8)
+    | (lookup(buffer(offset + 21).toInt) <<  4)
+    | (lookup(buffer(offset + 22).toInt)      )
+    )
 
-      val lsb3 = (
-        (Lookup(uuid.charAt(19).toInt) << 12)
-      | (Lookup(uuid.charAt(20).toInt) <<  8)
-      | (Lookup(uuid.charAt(21).toInt) <<  4)
-      | (Lookup(uuid.charAt(22).toInt)      )
-      )
+    val lsb2 = (
+      (lookup(buffer(offset + 24).toInt) << 12)
+    | (lookup(buffer(offset + 25).toInt) <<  8)
+    | (lookup(buffer(offset + 26).toInt) <<  4)
+    | (lookup(buffer(offset + 27).toInt)      )
+    )
 
-      val lsb2 = (
-        (Lookup(uuid.charAt(24).toInt) << 12)
-      | (Lookup(uuid.charAt(25).toInt) <<  8)
-      | (Lookup(uuid.charAt(26).toInt) <<  4)
-      | (Lookup(uuid.charAt(27).toInt)      )
-      )
+    val lsb1 = (
+      (lookup(buffer(offset + 28).toInt) << 12)
+    | (lookup(buffer(offset + 29).toInt) <<  8)
+    | (lookup(buffer(offset + 30).toInt) <<  4)
+    | (lookup(buffer(offset + 31).toInt)      )
+    )
 
-      val lsb1 = (
-        (Lookup(uuid.charAt(28).toInt) << 12)
-      | (Lookup(uuid.charAt(29).toInt) <<  8)
-      | (Lookup(uuid.charAt(30).toInt) <<  4)
-      | (Lookup(uuid.charAt(31).toInt)      )
-      )
+    val lsb0 = (
+      (lookup(buffer(offset + 32).toInt) << 12)
+    | (lookup(buffer(offset + 33).toInt) <<  8)
+    | (lookup(buffer(offset + 34).toInt) <<  4)
+    | (lookup(buffer(offset + 35).toInt)      )
+    )
 
-      val lsb0 = (
-        (Lookup(uuid.charAt(32).toInt) << 12)
-      | (Lookup(uuid.charAt(33).toInt) <<  8)
-      | (Lookup(uuid.charAt(34).toInt) <<  4)
-      | (Lookup(uuid.charAt(35).toInt)      )
-      )
-
-      if ((msb3 | msb2 | msb1 | msb0 | lsb3 | lsb2 | lsb1 | lsb0) < 0) None else {
-        Some(new UUID(
-          (((msb3 << 16) | msb2).toLong << 32) | (msb1.toLong << 16) | msb0
-        , (((lsb3 << 16) | lsb2).toLong << 32) | (lsb1.toLong << 16) | lsb0
-        ))
-      }
-    } catch {
-      case _: ArrayIndexOutOfBoundsException =>
-        None
+    // check for separators and if any of the characters were not a hexadecimal value
+    if (buffer(offset +  8) != '-' || buffer(offset + 13) != '-' ||
+        buffer(offset + 18) != '-' || buffer(offset + 23) != '-' ||
+        (msb3 | msb2 | msb1 | msb0 | lsb3 | lsb2 | lsb1 | lsb0) < 0) None else {
+      Some(UUID(
+        (((msb3 << 16) | msb2).toLong << 32) | (msb1.toLong << 16) | msb0
+      , (((lsb3 << 16) | lsb2).toLong << 32) | (lsb1.toLong << 16) | lsb0
+      ))
     }
+  } catch {
+    case _: ArrayIndexOutOfBoundsException =>
+      None
   }
 
-  def unapply(uuid: UUID): Option[String] =
-    Some(uuid.string)
+  /** Creates a new `UUID` by parsing a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
+  final def apply(uuid: String): UUID = {
+    val res = unapply(uuid)
+    if (!res.isDefined) throw new IllegalArgumentException(s"UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: ${uuid})")
+    res.get
+  }
 
-  // --- Forwarders ---
+  /** Extractor which parses a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
+  def unapply(uuid: String): Option[UUID] =
+    fromCharArrayViaLookup(uuid.toCharArray, 0, Lookup)
 
-  def fromString(name: String): UUID =
+  /** Allows for parsing using the legacy, non-strict parser used in `java.util.UUID.fromString` */
+  @inline final def apply(uuid: String, strict: Boolean): UUID =
+    if (strict) {
+      apply(uuid)
+    } else {
+      fromString(uuid)
+    }
+
+  // --- Static forwarders ---
+
+  /** Creates a new `UUID` by parsing a `String` in legacy (non-strict) format. */
+  @inline final def fromString(name: String): UUID =
     java.util.UUID.fromString(name)
 
-  def randomUUID(): UUID =
+  /** Generates a random `UUID` (type 4) using a cryptographically strong pseudo random number generator. */
+  @inline final def randomUUID(): UUID =
     java.util.UUID.randomUUID()
 
-  def nameUUIDFromBytes(name: Array[Byte]): UUID =
+  /** Digests the provided byte array using MD5 and returns a type 3 (name based) `UUID`. */
+  @inline final def nameUUIDFromBytes(name: Array[Byte]): UUID =
     java.util.UUID.nameUUIDFromBytes(name)
 }

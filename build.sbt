@@ -1,7 +1,7 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.1.8-SNAPSHOT"
+version := "0.2.0"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
@@ -18,6 +18,7 @@ scalacOptions ++= Seq(
 , "-language:implicitConversions"
 , "-optimise"
 , "-unchecked"
+, "-Xfatal-warnings"
 , "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
@@ -37,5 +38,12 @@ scalacOptions ++= Seq(
 , "-Ywarn-numeric-widen"
 , "-Ywarn-unused"
 )
+scalacOptions in (Compile, doc) ++= Seq(
+  "-no-link-warnings"
+, "-sourcepath", (scalaSource in Compile).value.toString
+, "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
+    CrossVersion.partialVersion(scalaVersion.value).get.productIterator.mkString(".")
+  }.x/src/main/scala€{FILE_PATH}.scala"""
+)
 
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw)
+wartremoverWarnings in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial)

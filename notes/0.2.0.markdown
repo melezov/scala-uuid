@@ -1,0 +1,13 @@
+scala-uuid 0.2.0 is out with more optimized goodness!
+
+### Breaking changes:
+* The primary constructor `UUID(_: String)` now requires a strict, 36 character UUID in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format
+* Removed long tuple factory / accessor
+* Removed "useless" string extractor
+
+### Other changes:
+* Added optimized primitive constructors and array factories (`long`, `int`, `short`, `byte`, `char`)
+* Inlined static forwarders and utility methods
+* `StaticUUID` is now a class, extended by the `StaticUUID` object
+* Added ScalaDoc for all methods, linked to GitHub sources
+* Now, and forever running with 100% test coverage!
