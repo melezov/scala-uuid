@@ -9,12 +9,9 @@ private[this] object RichUUID {
 
 /** Pimp-my-library pattern, wrapping the underlying `java.util.UUID`.
   *
-  * This class extends AnyVal, making all the extension methods have
-  * little-to-no runtime overhead.
-  *
   * The pimp is complete through an implicit conversion in the
-  * [[Imports]] trait or the [[io.jvm.uuid.package uuid]] package object. */
-class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
+  * [[uuid.Imports]] trait or the [[io.jvm.uuid.package]] package object. */
+class RichUUID private[uuid] (val uuid: UUID) {
   /** Returns the most significant 64 bits of this `UUID`. */
   final def mostSigBits: Long = uuid.getMostSignificantBits
 
@@ -122,7 +119,7 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
     toCharArrayViaLookup(buffer, offset, RichUUID.LowercaseLookup)
 
   /** Serializes this `UUID` to the provided `Char` array via a translation matrix. */
-  @inline private final def toCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Char]): Unit = {
+  @inline private[this] final def toCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Char]): Unit = {
     val msb = uuid.getMostSignificantBits
     val msbh = (msb >>> 32).toInt
     buffer(offset     ) = lookup((msbh >>> 28)      )
@@ -184,7 +181,7 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
 
   /** Translate this `UUID` to a `String` via the provided lookup.
     * This method should be inlined. */
-  @inline private final def toStringViaLookup(lookup: Array[Char]): String = {
+  @inline private[this] final def toStringViaLookup(lookup: Array[Char]): String = {
     val buffer = new Array[Char](36)
     toCharArrayViaLookup(buffer, 0, lookup)
     new String(buffer)

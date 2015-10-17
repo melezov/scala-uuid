@@ -2,7 +2,7 @@ package io.jvm
 
 /** This package holds the optimized Scala wrapper for `java.util.UUID`.
   *
-  * To use the wrapper, either extend the [[uuid.Imports Imports]] trait
+  * To use the wrapper, either extend the [[uuid.Imports]] trait
   * or import this package object to bring the implicit into scope that way:
   * {{{
   * scala> import io.jvm.uuid._

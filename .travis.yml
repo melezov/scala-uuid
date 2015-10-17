@@ -1,10 +1,14 @@
 language: scala
 
 scala:
-  - "2.10.6"
+  - "2.9.0"
+  - "2.9.0-1"
+  - "2.9.1"
+  - "2.9.1-1"
+  - "2.9.2"
+  - "2.9.3"
 
 jdk:
-  - oraclejdk8
   - oraclejdk7
   - openjdk7
   - openjdk6
@@ -16,8 +20,4 @@ notifications:
     recipients:
       - marko@mentat-labs.com
 
-script:
-  - sbt ++$TRAVIS_SCALA_VERSION coverage test publishLocal
-
-after_success:
-  - pip install --user codecov && codecov
+script: sbt ++$TRAVIS_SCALA_VERSION publishLocal

@@ -24,9 +24,9 @@ class StaticUUID {
   /** Throws an exception because there was a length mismatch.
     * If the actual length was greater than what was expected, suggests using the alternative constructor. */
   private[this] def throwInvalidLength(tpe: String, expected: Int, actual: Int): Nothing =
-    throw new IllegalArgumentException(s"Expecting a${if (tpe == "int") "n" else ""} ${tpe} array of length ${expected}, but length was ${actual}${
-      if (actual < expected) " (too short)" else s"; if you wish to skip this check use UUID.from${tpe.head.toUpper + tpe.tail}Array instead!"
-    }")
+    throw new IllegalArgumentException("Expecting a" + (if (tpe == "int") "n " else " ") + tpe + " array of length " + expected + ", but length was " + actual + (
+      if (actual < expected) " (too short)" else "; if you wish to skip this check use UUID.from" + tpe.head.toUpper + tpe.tail + "Array instead!"
+    ))
 
   /** Creates a new `UUID` by concatenating two 64-bit values.
     * @throws  IllegalArgumentException In case `buffer.length` != 2 */
@@ -215,7 +215,7 @@ class StaticUUID {
   /** Creates a new `UUID` by parsing a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
   final def apply(uuid: String): UUID = {
     val res = unapply(uuid)
-    if (!res.isDefined) throw new IllegalArgumentException(s"UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: ${uuid})")
+    if (!res.isDefined) throw new IllegalArgumentException("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + uuid + ")")
     res.get
   }
 
