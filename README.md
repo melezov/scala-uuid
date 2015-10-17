@@ -1,9 +1,9 @@
 # scala-uuid
-[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.9.x)](https://travis-ci.org/melezov/scala-uuid)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.9.3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.9.3)
-[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.9.3.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.9.3)
+[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.8.x)](https://travis-ci.org/melezov/scala-uuid)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.8.2/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.8.2)
+[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.8.2.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.8.2)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.9.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.9.x)
+[![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.8.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.8.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").

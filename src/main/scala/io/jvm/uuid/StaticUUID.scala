@@ -8,17 +8,17 @@ object StaticUUID extends StaticUUID
   * Extend this class from the client code in order to add new functionality to the library. */
 class StaticUUID {
   /** Generates a random `UUID` (type 4) using a cryptographically strong pseudo random number generator. */
-  @inline final def random: UUID =
+  final def random: UUID =
     randomUUID()
 
   /** Creates a new `UUID` by concatenating two 64-bit values.
     * @param  mostSigBits Most significant bits of the new `UUID`
     * @param  leastSigBits Least significant bits of the new `UUID` */
-  @inline final def apply(mostSigBits: Long, leastSigBits: Long): UUID =
+  final def apply(mostSigBits: Long, leastSigBits: Long): UUID =
     new UUID(mostSigBits, leastSigBits)
 
   /** Helper length checker which will be inlined into `UUID` factories. */
-  @inline private[this] def lengthCheck(tpe: String, expected: Int, actual: Int): Unit =
+  private[this] def lengthCheck(tpe: String, expected: Int, actual: Int): Unit =
     if (expected != actual) throwInvalidLength(tpe, expected, actual)
 
   /** Throws an exception because there was a length mismatch.
@@ -37,7 +37,7 @@ class StaticUUID {
 
   /** Creates a new `UUID` by concatenating two 64-bit values.
     * @param  offset Offset of the most significant `Long` inside the array. */
-  @inline final def fromLongArray(buffer: Array[Long], offset: Int): UUID =
+  final def fromLongArray(buffer: Array[Long], offset: Int): UUID =
     UUID(
       buffer(offset    )
     , buffer(offset + 1)
@@ -52,7 +52,7 @@ class StaticUUID {
 
   /** Creates a new `UUID` by concatenating four 32-bit values.
     * @param  offset Offset of the most significant `Int` inside the array. */
-  @inline final def fromIntArray(buffer: Array[Int], offset: Int): UUID = {
+  final def fromIntArray(buffer: Array[Int], offset: Int): UUID = {
     UUID(
       (buffer(offset    ).toLong) << 32
     | (buffer(offset + 1) & 0xffffffffL)
@@ -70,7 +70,7 @@ class StaticUUID {
 
   /** Creates a new `UUID` by concatenating eight 16-bit values.
     * @param  offset Offset of the most significant `Short` inside the array. */
-  @inline final def fromShortArray(buffer: Array[Short], offset: Int): UUID =
+  final def fromShortArray(buffer: Array[Short], offset: Int): UUID =
     UUID(
       (buffer(offset    )          ).toLong << 48
     | (buffer(offset + 1) & 0xffffL)        << 32
@@ -91,7 +91,7 @@ class StaticUUID {
 
   /** Creates a new `UUID` by concatenating 16 bytes.
     * @param  offset Offset of the most significant `Byte` inside the array. */
-  @inline final def fromByteArray(buffer: Array[Byte], offset: Int): UUID =
+  final def fromByteArray(buffer: Array[Byte], offset: Int): UUID =
     UUID(
       (buffer(offset     )       ).toLong << 56
     | (buffer(offset +  1) & 0xff).toLong << 48
@@ -134,14 +134,14 @@ class StaticUUID {
 
   /** Creates a new `UUID` by parsing 36 chars in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format.
     * @param  offset Position of the first `Char` in the array. */
-  @inline final def fromCharArray(buffer: Array[Char], offset: Int): UUID = {
+  final def fromCharArray(buffer: Array[Char], offset: Int): UUID = {
     val res = fromCharArrayViaLookup(buffer, offset, Lookup)
 	  if (!res.isDefined) throw new IllegalArgumentException("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit")
     res.get
   }
 
   /** Parses an `UUID` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format from an array of characters, helper utility. */
-  @inline private final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): Option[UUID] = try {
+  private final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): Option[UUID] = try {
     val msb3 = (
       (lookup(buffer(offset +  0).toInt) << 12)
     | (lookup(buffer(offset +  1).toInt) <<  8)
@@ -224,7 +224,7 @@ class StaticUUID {
     fromCharArrayViaLookup(uuid.toCharArray, 0, Lookup)
 
   /** Allows for parsing using the legacy, non-strict parser used in `java.util.UUID.fromString` */
-  @inline final def apply(uuid: String, strict: Boolean): UUID =
+  final def apply(uuid: String, strict: Boolean): UUID =
     if (strict) {
       apply(uuid)
     } else {
@@ -234,14 +234,14 @@ class StaticUUID {
   // --- Static forwarders ---
 
   /** Creates a new `UUID` by parsing a `String` in legacy (non-strict) format. */
-  @inline final def fromString(name: String): UUID =
+  final def fromString(name: String): UUID =
     java.util.UUID.fromString(name)
 
   /** Generates a random `UUID` (type 4) using a cryptographically strong pseudo random number generator. */
-  @inline final def randomUUID(): UUID =
+  final def randomUUID(): UUID =
     java.util.UUID.randomUUID()
 
   /** Digests the provided byte array using MD5 and returns a type 3 (name based) `UUID`. */
-  @inline final def nameUUIDFromBytes(name: Array[Byte]): UUID =
+  final def nameUUIDFromBytes(name: Array[Byte]): UUID =
     java.util.UUID.nameUUIDFromBytes(name)
 }
