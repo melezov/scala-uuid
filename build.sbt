@@ -10,7 +10,7 @@ unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.4" % "test"
 
 // ### COMPILE SETTINGS ### //
-scalaVersion := "2.11.7"
+crossScalaVersions := Seq("2.10.6")
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
@@ -24,7 +24,6 @@ scalacOptions ++= Seq(
 , "-Xno-forwarders"
 , "-Xverify"
 , "-Yclosure-elim"
-, "-Yconst-opt"
 , "-Ydead-code"
 , "-Yinline-warnings"
 , "-Yinline"
@@ -32,11 +31,9 @@ scalacOptions ++= Seq(
 , "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
 , "-Ywarn-inaccessible"
-, "-Ywarn-infer-any"
 , "-Ywarn-nullary-override"
 , "-Ywarn-nullary-unit"
 , "-Ywarn-numeric-widen"
-, "-Ywarn-unused"
 )
 scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings"
@@ -45,5 +42,3 @@ scalacOptions in (Compile, doc) ++= Seq(
     CrossVersion.partialVersion(scalaVersion.value).get.productIterator.mkString(".")
   }.x/src/main/scala€{FILE_PATH}.scala"""
 )
-
-wartremoverWarnings in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial)

@@ -122,7 +122,7 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
     toCharArrayViaLookup(buffer, offset, RichUUID.LowercaseLookup)
 
   /** Serializes this `UUID` to the provided `Char` array via a translation matrix. */
-  @inline private[this] final def toCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Char]): Unit = {
+  @inline private final def toCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Char]): Unit = {
     val msb = uuid.getMostSignificantBits
     val msbh = (msb >>> 32).toInt
     buffer(offset     ) = lookup((msbh >>> 28)      )
@@ -184,7 +184,7 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
 
   /** Translate this `UUID` to a `String` via the provided lookup.
     * This method should be inlined. */
-  @inline private[this] final def toStringViaLookup(lookup: Array[Char]): String = {
+  @inline private final def toStringViaLookup(lookup: Array[Char]): String = {
     val buffer = new Array[Char](36)
     toCharArrayViaLookup(buffer, 0, lookup)
     new String(buffer)
