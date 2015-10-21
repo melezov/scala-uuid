@@ -1,13 +1,13 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.2.0"
+version := "0.2.1"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.4" % "test"
+libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.5" % "test"
 
 // ### COMPILE SETTINGS ### //
 crossScalaVersions := Seq("2.10.6")
@@ -40,5 +40,5 @@ scalacOptions in (Compile, doc) ++= Seq(
 , "-sourcepath", (scalaSource in Compile).value.toString
 , "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
     CrossVersion.partialVersion(scalaVersion.value).get.productIterator.mkString(".")
-  }.x/src/main/scalaâ‚¬{FILE_PATH}.scala"""
+  }.x/src/main/scala€{FILE_PATH}.scala"""
 )

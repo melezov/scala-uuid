@@ -22,6 +22,8 @@ class UUIDFeatureCheck
     strict with check             $strictStringWithCheck
     non-strict with check (fail)  $strictStringFailure
     non-strict with check         $nonStrictStringWithCheck
+    apply with suffix (fail)      $applyWithSuffixFailure
+    unapply with suffix (fail)    $unapplyWithSuffixFailure
 
   Array roundtrips
     long array                    $longArray
@@ -122,7 +124,7 @@ class UUIDFeatureCheck
 
   // Tests parsing which produces ArrayIndexOutOfBoundsException
   def strictStringFailure = Prop.forAllNoShrink(invalidStrictStringGen) { iss =>
-    Try { UUID(iss, true) } isFailure
+    Try { UUID(iss, true) }.isFailure
   }
 
   def nonStrictStringWithCheck = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
@@ -134,6 +136,20 @@ class UUIDFeatureCheck
     } else {
       result.isFailure
     }
+  }
+
+  private val hexOrNoHexGen = Gen.oneOf(hexCharGen, nonHexCharGen)
+  private val strictStringWithSuffixGen = for {
+    ss <- strictStringGen
+    ch <- hexOrNoHexGen
+  } yield ss + ch
+
+  def applyWithSuffixFailure = Prop.forAllNoShrink(strictStringWithSuffixGen) { sss =>
+    Try { UUID(sss) }.isFailure
+  }
+
+  def unapplyWithSuffixFailure = Prop.forAllNoShrink(strictStringWithSuffixGen) { sss =>
+    UUID.unapply(sss) === None
   }
 
   // Array roundtrips
