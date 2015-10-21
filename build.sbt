@@ -1,7 +1,7 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.2.1"
+version := "0.2.2-SNAPSHOT"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
@@ -43,7 +43,10 @@ scalacOptions in (Compile, doc) ++= Seq(
 , "-sourcepath", (scalaSource in Compile).value.toString
 , "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
     CrossVersion.partialVersion(scalaVersion.value).get.productIterator.mkString(".")
-  }.x/src/main/scala€{FILE_PATH}.scala"""
+  }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
 )
 
 wartremoverWarnings in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial)
+
+proguardSettings
+ProguardKeys.proguardVersion := "5.2.1"
