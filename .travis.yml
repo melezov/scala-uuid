@@ -1,5 +1,13 @@
 language: scala
 
+branches:
+  only:
+    - 2.12.x
+    - 2.11.x
+    - 2.10.x
+    - 2.9.x
+    - 2.8.x
+
 scala:
   - "2.9.0"
   - "2.9.0-1"

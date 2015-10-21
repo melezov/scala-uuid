@@ -8,7 +8,7 @@
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Latest version (0.2.0) has been published against all reasonable versions of Scala:  
+Latest version (0.2.1) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 **2.10.x**: 2.10.6  
@@ -20,7 +20,7 @@ Latest version (0.2.0) has been published against all reasonable versions of Sca
 To add the library dependency to your project, simply add:
 
 ```scala
-    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.0"
+    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.1"
 ```
 
 #### In order to use:
@@ -134,11 +134,11 @@ String accessors are much more optimized than vanilla `toString` ([**3x** speedu
 
 An optimized `String` extractor is also available for your needs (e.g. when extracting URL parameters):
 
-    scala> val SubmitEvent = "/event/([^/]+)/submit".r
-    SubmitEvent: scala.util.matching.Regex = /event/([^/]+)/submit
+    scala> val SubmitEventRoute = "/event/([^/]+)/submit".r
+    SubmitEventRoute: scala.util.matching.Regex = /event/([^/]+)/submit
 
-    scala> val SubmitEvent(UUID(id)) = "/event/12345678-1234-1234-1234-123456789abcd/submit"
-    id: io.jvm.uuid.UUID = 12345678-1234-1234-1234-123456789abc
+    scala> val SubmitEventRoute(UUID(eventId)) = "/event/EF72505A-A9A6-4CD7-A14C-8F27C96FD727/submit"
+    eventId: io.jvm.uuid.UUID = ef72505a-a9a6-4cd7-a14c-8f27c96fd727
 
 For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
