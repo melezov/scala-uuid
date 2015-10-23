@@ -1,4 +1,5 @@
-// ### PUBLISH SETTINGS ###
+// ### PUBLISH SETTINGS ### //
+
 publishTo := Some(
   if (version.value endsWith "-SNAPSHOT")
     Opts.resolver.sonatypeSnapshots
@@ -29,3 +30,49 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 homepage := Some(url("https://github.com/melezov/scala-uuid"))
+
+// ### PROGUARD SETTINGS ### //
+
+proguardSettings
+ProguardKeys.proguardVersion in Proguard := "5.2.1"
+
+ProguardKeys.options in Proguard := {
+  val programVer = version.value
+  val scalaVer = scalaVersion.value
+  val scalaBinVer = scalaBinaryVersion.value
+
+  val baseDir = baseDirectory.value
+  val binaryDeps = (ProguardKeys.binaryDeps in Proguard).value
+
+  // read lib path from binary relations, failover to default Ivy cache location
+  val scalaJarName = s"scala-library-${scalaVer}.jar"
+  val scalaJarFile = binaryDeps find(_.name == scalaJarName) getOrElse (
+    Path.userHome / s"/.ivy2/cache/org.scala-lang/scala-library/jars/${scalaJarName}"
+  )
+
+  // Try environment setting, then javaHome, then runtime JVM
+  val java6Home = sys.env.get("JAVA6_HOME").map(new File(_))
+  val jreMin = (java6Home orElse javaHome.value).getOrElse(
+    new File(sys.props("java.home"))
+  )
+
+  val runtimeCandidates = Seq("/jre/lib/rt.jar", "/lib/rt.jar") map { jreMin / }
+  var runtimeJar = runtimeCandidates find { _.exists } getOrElse {
+    sys.error("Could not locate runtime jar in path: " + jreMin)
+  }
+
+  val jarName = s"scala-uuid_${scalaBinVer}-${programVer}.jar"
+  val inJar = s"${baseDir}/target/scala-${scalaBinVer}/${jarName}"
+  val outJar = s"${baseDir}/target/scala-${scalaBinVer}/proguard/${jarName}"
+
+  s"""
+-injars '${inJar}'
+-target 1.6
+-libraryjars '${runtimeJar}'
+-libraryjars '${scalaJarFile}'
+-outjars '${outJar}'
+-dontobfuscate
+-optimizationpasses 32
+-keep class io.jvm.uuid.** { *; }
+""".trim.split("\n")
+}

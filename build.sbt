@@ -10,6 +10,16 @@ unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.5" % "test"
 
 // ### COMPILE SETTINGS ### //
+javacOptions ++= Seq(
+  "-encoding", "UTF-8"
+, "-deprecation"
+, "-Xlint"
+, "-target", "1.6"
+, "-source", "1.6"
+) ++ (sys.env.get("JAVA6_HOME") match {
+  case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
+  case _ => Nil
+})
 scalaVersion := "2.11.7"
 scalacOptions ++= Seq(
   "-deprecation"
@@ -17,6 +27,7 @@ scalacOptions ++= Seq(
 , "-feature"
 , "-language:implicitConversions"
 , "-optimise"
+, "-target:jvm-1.6"
 , "-unchecked"
 , "-Xfatal-warnings"
 , "-Xlint"
@@ -46,7 +57,4 @@ scalacOptions in (Compile, doc) ++= Seq(
   }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
 )
 
-wartremoverWarnings in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial)
-
-proguardSettings
-ProguardKeys.proguardVersion := "5.2.1"
+wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial, Wart.Var)

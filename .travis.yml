@@ -2,6 +2,7 @@ language: scala
 
 branches:
   only:
+    - master
     - 2.12.x
     - 2.11.x
     - 2.10.x
@@ -25,7 +26,8 @@ notifications:
       - marko@mentat-labs.com
 
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION coverage test publishLocal
+  # Try to build documentation, package sources, run ProGuard and test coverage
+  - sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard clean coverage test
 
 after_success:
   - pip install --user codecov && codecov
