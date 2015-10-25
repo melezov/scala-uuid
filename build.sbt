@@ -7,7 +7,7 @@ unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.5" % "test"
+libraryDependencies += "org.specs2" % "specs2-scalacheck_2.12.0-M2" % "3.6.4-20151016053644-0ca99ef" % "test"
 
 // ### COMPILE SETTINGS ### //
 javacOptions ++= Seq(
@@ -20,25 +20,19 @@ javacOptions ++= Seq(
   case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
   case _ => Nil
 })
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.0-M3"
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
 , "-feature"
 , "-language:implicitConversions"
-, "-optimise"
-, "-target:jvm-1.6"
 , "-unchecked"
 , "-Xfatal-warnings"
 , "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
 , "-Xverify"
-, "-Yclosure-elim"
-, "-Yconst-opt"
-, "-Ydead-code"
 , "-Yinline-warnings"
-, "-Yinline"
 , "-Yrepl-sync"
 , "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
@@ -57,4 +51,4 @@ scalacOptions in (Compile, doc) ++= Seq(
   }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
 )
 
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial, Wart.Var)
+// wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial, Wart.Var)
