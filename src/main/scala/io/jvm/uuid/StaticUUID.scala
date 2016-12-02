@@ -25,15 +25,15 @@ class StaticUUID {
     * If the actual length was greater than what was expected, suggests using the alternative constructor. */
   private[this] final def throwInvalidLength(tpe: String, expected: Int, actual: Int): Nothing =
     throw new IllegalArgumentException(
-      "Expecting a" + (if (tpe == "int") "n " else " ") + tpe + " array of length " + expected + ", but length was " + actual + (
-        if (actual < expected) " (too short)" else "; if you wish to skip this check use UUID.from" + tpe.head.toUpper + tpe.tail + "Array instead!"
+      (if (tpe == "int") "Expecting an " else "Expecting a ") + tpe + " array of length " + expected + ", but length was " + actual + (
+        if (actual < expected) " (too short)" else "; if you wish to skip this check use UUID.from" + tpe + "Array instead!"
       )
     )
 
   /** Creates a new `UUID` by concatenating two 64-bit values.
     * @throws  IllegalArgumentException In case `buffer.length` != 2 */
   final def apply(buffer: Array[Long]): UUID = {
-    lengthCheck("long", 2, buffer.length)
+    lengthCheck("Long", 2, buffer.length)
     fromLongArray(buffer, 0)
   }
 
@@ -48,7 +48,7 @@ class StaticUUID {
   /** Creates a new `UUID` by concatenating four 32-bit values.
     * @throws  IllegalArgumentException In case `buffer.length != 4` */
   final def apply(buffer: Array[Int]): UUID = {
-    lengthCheck("int", 4, buffer.length)
+    lengthCheck("Int", 4, buffer.length)
     fromIntArray(buffer, 0)
   }
 
@@ -66,7 +66,7 @@ class StaticUUID {
   /** Creates a new `UUID` by concatenating eight 16-bit values.
     * @throws  IllegalArgumentException In case `buffer.length != 8` */
   final def apply(buffer: Array[Short]): UUID = {
-    lengthCheck("short", 8, buffer.length)
+    lengthCheck("Short", 8, buffer.length)
     fromShortArray(buffer, 0)
   }
 
@@ -87,7 +87,7 @@ class StaticUUID {
   /** Creates a new `UUID` by concatenating 16 bytes.
     * @throws  IllegalArgumentException In case `buffer.length != 16` */
   final def apply(buffer: Array[Byte]): UUID = {
-    lengthCheck("byte", 16, buffer.length)
+    lengthCheck("Byte", 16, buffer.length)
     fromByteArray(buffer, 0)
   }
 
@@ -115,7 +115,7 @@ class StaticUUID {
 
   /** Hexadecimal character to integer value mapping used in parser.
     * Invalid characters are marked with a value of `-1`. */
-  private[this] final val Lookup = {
+  private[this] final val Lookup: Array[Int] = {
     val buffer = new Array[Int]('f' + 1)
     var i = buffer.length
     while (i > 0) {
@@ -132,7 +132,7 @@ class StaticUUID {
   /** Creates a new `UUID` by parsing 36 chars.
     * @throws  IllegalArgumentException In case `buffer.length != 36` */
   final def apply(buffer: Array[Char]): UUID = {
-    lengthCheck("char", 36, buffer.length)
+    lengthCheck("Char", 36, buffer.length)
     fromCharArray(buffer, 0)
   }
 
@@ -142,7 +142,7 @@ class StaticUUID {
     val res = fromCharArrayViaLookup(buffer, offset, Lookup)
     if (!res.isDefined) throw new IllegalArgumentException(
         "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " +
-        new String(buffer, offset, math.min(buffer.length - offset, 36))+ ')')
+        new String(buffer, offset, math.min(buffer.length - offset, 36))+ ")")
     res.get
   }
 
@@ -230,7 +230,7 @@ class StaticUUID {
   final def apply(uuid: String): UUID = {
     val res = fromStrictString(uuid)
     if (!res.isDefined) throw new IllegalArgumentException(
-        "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + uuid + ')')
+        "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + uuid + ")")
     res.get
   }
 
@@ -245,6 +245,10 @@ class StaticUUID {
     } else {
       fromString(uuid)
     }
+
+  /** Generates a random `UUID` (type 4) and returns its lowercase String representation */
+  final def randomString: String =
+    randomUUID().string // TODO: optimize this not to bother GC with throwaway UUIDs
 
   // --- Static forwarders ---
 

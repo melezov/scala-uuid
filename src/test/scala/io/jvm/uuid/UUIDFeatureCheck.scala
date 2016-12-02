@@ -52,6 +52,8 @@ class UUIDFeatureCheck
     char array with offset        $charArrayWithOffset
     char array with offsets       $charArrayWithOffsets
 
+    randomString                  $randomString
+
   Version conformism
     naming is version 3           $namingIsVersion3
     random is version 4           $randomIsVersion4
@@ -61,10 +63,10 @@ class UUIDFeatureCheck
 
   def msbLsbLongs = prop { (msb: Long, lsb: Long) =>
     val uuid = UUID(msb, lsb)
-    msb === uuid.getMostSignificantBits &&
-    msb === uuid.mostSigBits &&
-    lsb === uuid.getLeastSignificantBits &&
-    lsb === uuid.leastSigBits
+    msb ==== uuid.getMostSignificantBits &&
+    msb ==== uuid.mostSigBits &&
+    lsb ==== uuid.getLeastSignificantBits &&
+    lsb ==== uuid.leastSigBits
   }
 
   // String roundtrips
@@ -98,8 +100,12 @@ class UUIDFeatureCheck
   } yield s"$w0-$w1-$w2-$w3-$w4"
 
   def strictString = Prop.forAllNoShrink(strictStringGen) { ss =>
-    UUID(ss       ).toString === ss.toLowerCase(Locale.ENGLISH) &&
-    UUID(ss, false).toString === ss.toLowerCase(Locale.ENGLISH)
+    UUID(ss       ).string ==== ss.toLowerCase(Locale.ENGLISH) &&
+    UUID(ss, false).string ==== ss.toLowerCase(Locale.ENGLISH)
+    UUID(ss       ).toLowerCase ==== ss.toLowerCase(Locale.ENGLISH) &&
+    UUID(ss, false).toLowerCase ==== ss.toLowerCase(Locale.ENGLISH)
+    UUID(ss       ).toUpperCase ==== ss.toUpperCase(Locale.ENGLISH) &&
+    UUID(ss, false).toUpperCase ==== ss.toUpperCase(Locale.ENGLISH)
   }
 
   def nonStrictString = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
@@ -108,7 +114,7 @@ class UUIDFeatureCheck
   }
 
   def strictStringWithCheck = Prop.forAllNoShrink(strictStringGen) { ss =>
-    UUID(ss, true).string === ss.toLowerCase(Locale.ENGLISH)
+    UUID(ss, true).string ==== ss.toLowerCase(Locale.ENGLISH)
   }
 
   private val placeInStrictStringGen = Gen.choose(0, UUID.random.string.length - 1)
@@ -149,7 +155,7 @@ class UUIDFeatureCheck
   }
 
   def unapplyWithSuffixFailure = Prop.forAllNoShrink(strictStringWithSuffixGen) { sss =>
-    UUID.unapply(sss) === None
+    UUID.unapply(sss) ==== None
   }
 
   // Array roundtrips
@@ -160,7 +166,7 @@ class UUIDFeatureCheck
   private val longArrayTooLongGen = Gen.listOfN[Long](4, longGen).map(_.toArray)
 
   def longArray = Prop.forAllNoShrink(longArrayGen) { la =>
-    UUID(la).longArray === la
+    UUID(la).longArray ==== la
   }
 
   def longArrayWrongSize = Prop.forAllNoShrink(longArrayTooShortGen, longArrayTooLongGen) { (tooShort, tooLong) =>
@@ -170,12 +176,12 @@ class UUIDFeatureCheck
 
   def longArrayWithOffset = Prop.forAllNoShrink(longArrayGen, longArrayTooLongGen) { (src, dst) =>
     UUID(src).toLongArray(dst, 1)
-    dst.tail.init === src
+    dst.tail.init ==== src
   }
 
   def longArrayWithOffsets = Prop.forAllNoShrink(longArrayTooLongGen, longArrayTooLongGen) { (src, dst) =>
     UUID.fromLongArray(src, 1).toLongArray(dst, 1)
-    dst.tail.init === src.tail.init
+    dst.tail.init ==== src.tail.init
   }
 
   private val intGen = Arbitrary.arbInt.arbitrary
@@ -184,7 +190,7 @@ class UUIDFeatureCheck
   private val intArrayTooLongGen = Gen.listOfN[Int](6, intGen).map(_.toArray)
 
   def intArray = Prop.forAllNoShrink(intArrayGen) { ia =>
-    UUID(ia).intArray === ia
+    UUID(ia).intArray ==== ia
   }
 
   def intArrayWrongSize = Prop.forAllNoShrink(intArrayTooShortGen, intArrayTooLongGen) { (tooShort, tooLong) =>
@@ -194,12 +200,12 @@ class UUIDFeatureCheck
 
   def intArrayWithOffset = Prop.forAllNoShrink(intArrayGen, intArrayTooLongGen) { (src, dst) =>
     UUID(src).toIntArray(dst, 1)
-    dst.tail.init === src
+    dst.tail.init ==== src
   }
 
   def intArrayWithOffsets = Prop.forAllNoShrink(intArrayTooLongGen, intArrayTooLongGen) { (src, dst) =>
     UUID.fromIntArray(src, 1).toIntArray(dst, 1)
-    dst.tail.init === src.tail.init
+    dst.tail.init ==== src.tail.init
   }
 
   private val shortGen = Arbitrary.arbShort.arbitrary
@@ -208,7 +214,7 @@ class UUIDFeatureCheck
   private val shortArrayTooLongGen = Gen.listOfN[Short](10, shortGen).map(_.toArray)
 
   def shortArray = Prop.forAllNoShrink(shortArrayGen) { sa =>
-    UUID(sa).shortArray === sa
+    UUID(sa).shortArray ==== sa
   }
 
   def shortArrayWrongSize = Prop.forAllNoShrink(shortArrayTooShortGen, shortArrayTooLongGen) { (tooShort, tooLong) =>
@@ -218,12 +224,12 @@ class UUIDFeatureCheck
 
   def shortArrayWithOffset = Prop.forAllNoShrink(shortArrayGen, shortArrayTooLongGen) { (src, dst) =>
     UUID(src).toShortArray(dst, 1)
-    dst.tail.init === src
+    dst.tail.init ==== src
   }
 
   def shortArrayWithOffsets = Prop.forAllNoShrink(shortArrayTooLongGen, shortArrayTooLongGen) { (src, dst) =>
     UUID.fromShortArray(src, 1).toShortArray(dst, 1)
-    dst.tail.init === src.tail.init
+    dst.tail.init ==== src.tail.init
   }
 
   private val byteGen = Arbitrary.arbByte.arbitrary
@@ -232,7 +238,7 @@ class UUIDFeatureCheck
   private val byteArrayTooLongGen = Gen.listOfN[Byte](18, byteGen).map(_.toArray)
 
   def byteArray = Prop.forAllNoShrink(byteArrayGen) { ba =>
-    UUID(ba).byteArray === ba
+    UUID(ba).byteArray ==== ba
   }
 
   def byteArrayWrongSize = Prop.forAllNoShrink(byteArrayTooShortGen, byteArrayTooLongGen) { (tooShort, tooLong) =>
@@ -242,12 +248,12 @@ class UUIDFeatureCheck
 
   def byteArrayWithOffset = Prop.forAllNoShrink(byteArrayGen, byteArrayTooLongGen) { (src, dst) =>
     UUID(src).toByteArray(dst, 1)
-    dst.tail.init === src
+    dst.tail.init ==== src
   }
 
   def byteArrayWithOffsets = Prop.forAllNoShrink(byteArrayTooLongGen, byteArrayTooLongGen) { (src, dst) =>
     UUID.fromByteArray(src, 1).toByteArray(dst, 1)
-    dst.tail.init === src.tail.init
+    dst.tail.init ==== src.tail.init
   }
 
   private val charArrayGen = strictStringGen.map(_.toCharArray)
@@ -256,7 +262,7 @@ class UUIDFeatureCheck
   private val charArrayInvalidGen = invalidStrictStringGen.map(_.toCharArray)
 
   def charArray = Prop.forAllNoShrink(charArrayGen) { ca =>
-    UUID(ca).charArray === ca.map(_.toLower)
+    UUID(ca).charArray ==== ca.map(_.toLower)
   }
 
   def charArrayFailure = Prop.forAllNoShrink(charArrayInvalidGen) { ca =>
@@ -270,12 +276,18 @@ class UUIDFeatureCheck
 
   def charArrayWithOffset = Prop.forAllNoShrink(charArrayGen, charArrayTooLongGen) { (src, dst) =>
     UUID(src).toCharArray(dst, 1)
-    dst.tail.init === src.map(_.toLower)
+    dst.tail.init ==== src.map(_.toLower)
   }
 
   def charArrayWithOffsets = Prop.forAllNoShrink(charArrayTooLongGen, charArrayTooLongGen) { (src, dst) =>
     UUID.fromCharArray(src, 1).toCharArray(dst, 1)
-    dst.tail.init === src.tail.init.map(_.toLower)
+    dst.tail.init ==== src.tail.init.map(_.toLower)
+  }
+
+  def randomString = Prop.forAll() { _ =>
+    val uuidString = UUID.randomString
+    uuidString ==== uuidString.toLowerCase(Locale.ENGLISH) &&
+    UUID(uuidString).string ==== uuidString
   }
 
   // Version conformism
@@ -286,10 +298,10 @@ class UUIDFeatureCheck
     val uuid = UUID.nameUUIDFromBytes(ba)
     val version = (uuid.getMostSignificantBits >>> 12) & 0xF
     val variant = uuid.getLeastSignificantBits >>> 62
-    version === 3 && variant === 2 && {
+    version ==== 3 && variant ==== 2 && {
       val reconstruct = UUID(MessageDigest.getInstance("MD5").digest(ba))
-      (reconstruct.mostSigBits & ~0xF000L) === (uuid.mostSigBits & ~0xF000L) &&
-      (reconstruct.leastSigBits & ~0xC000000000000000L) === (uuid.leastSigBits & ~0xC000000000000000L) // cool :)
+      (reconstruct.mostSigBits & ~0xF000L) ==== (uuid.mostSigBits & ~0xF000L) &&
+      (reconstruct.leastSigBits & ~0xC000000000000000L) ==== (uuid.leastSigBits & ~0xC000000000000000L) // cool :)
     }
   }
 
@@ -299,6 +311,6 @@ class UUIDFeatureCheck
     val uuid = UUID.random
     val version = (uuid.getMostSignificantBits >>> 12) & 0xF
     val variant = uuid.getLeastSignificantBits >>> 62
-    version === 4 && variant === 2
+    version ==== 4 && variant ==== 2
   }
 }
