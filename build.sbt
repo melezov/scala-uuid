@@ -1,13 +1,13 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.2.2-SNAPSHOT"
+version := "0.2.2"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" % "specs2-scalacheck_2.12.0-M2" % "3.6.4-20151016053644-0ca99ef" % "test"
+libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.8.6" % "test"
 
 // ### COMPILE SETTINGS ### //
 javacOptions ++= Seq(
@@ -20,19 +20,19 @@ javacOptions ++= Seq(
   case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
   case _ => Nil
 })
-scalaVersion := "2.12.0-M3"
+scalaVersion := "2.12.0"
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
 , "-feature"
 , "-language:implicitConversions"
+, "-opt:_"
 , "-unchecked"
 , "-Xfatal-warnings"
 , "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
 , "-Xverify"
-, "-Yinline-warnings"
 , "-Yrepl-sync"
 , "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
@@ -51,4 +51,31 @@ scalacOptions in (Compile, doc) ++= Seq(
   }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
 )
 
-// wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial, Wart.Var)
+wartremoverWarnings in (Compile, compile) ++= Seq(
+  Wart.Any
+, Wart.Any2StringAdd
+, Wart.AsInstanceOf
+, Wart.DefaultArguments
+, Wart.EitherProjectionPartial
+, Wart.Enumeration
+, Wart.ExplicitImplicitTypes
+, Wart.FinalCaseClass
+, Wart.FinalVal
+, Wart.IsInstanceOf
+, Wart.JavaConversions
+, Wart.LeakingSealed
+, Wart.ListOps
+, Wart.MutableDataStructures
+, Wart.NoNeedForMonad
+, Wart.NonUnitStatements
+, Wart.Nothing
+, Wart.Null
+, Wart.Option2Iterable
+, Wart.Product
+, Wart.Return
+, Wart.Serializable
+, Wart.StringPlusAny
+, Wart.ToString
+, Wart.TraversableOps
+, Wart.TryPartial
+)

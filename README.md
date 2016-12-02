@@ -1,20 +1,19 @@
 # scala-uuid
 [![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.12.x)](https://travis-ci.org/melezov/scala-uuid)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12.0-M3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12.0-M3)
-[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.0-M3.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.0-M3)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12.0-M3)
+[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.0-M3)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.12.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.12.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-#### This is the **development** branch (0.2.2-SNAPSHOT).
-
-Latest version (0.2.1) has been published against all reasonable versions of Scala:  
+Cross-building is caring - latest version (`0.2.2`) has been published against all versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 **2.10.x**: 2.10.6  
-**2.11.x**: 2.11.7
+**2.11.x**: 2.11.8  
+**2.12.x**: 2.12.0
 
 #### Installation:
 
@@ -22,7 +21,7 @@ Latest version (0.2.1) has been published against all reasonable versions of Sca
 To add the library dependency to your project, simply add:
 
 ```scala
-    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.1"
+    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.2"
 ```
 
 #### In order to use:
