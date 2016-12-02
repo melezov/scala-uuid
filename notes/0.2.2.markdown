@@ -1,0 +1,5 @@
+New use cases & optimizations!
+
+### Changes:
+- Added UUID.randomString
+- Proguarded against JRE6
