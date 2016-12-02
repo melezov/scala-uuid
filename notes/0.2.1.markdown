@@ -1,5 +1,5 @@
 This is a bugfix release!
 
-# Changes:
+### Changes:
 * `unnapply(_: String)` was using a parser which only validated first 36 characters, without a length check
 * `apply(_: String)` now also inlines the `Array[Char]` parsing bytecode

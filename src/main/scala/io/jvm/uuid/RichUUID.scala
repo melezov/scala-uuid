@@ -2,9 +2,9 @@ package io.jvm.uuid
 
 private[this] object RichUUID {
   /** Upper-case hexadecimal translation lookup. */
-  private final val UppercaseLookup = "0123456789ABCDEF".toCharArray
+  private final val UppercaseLookup: Array[Char] = "0123456789ABCDEF".toCharArray
   /** Lower-case hexadecimal translation lookup. */
-  private final val LowercaseLookup = "0123456789abcdef".toCharArray
+  private final val LowercaseLookup: Array[Char] = "0123456789abcdef".toCharArray
 }
 
 /** Pimp-my-library pattern, wrapping the underlying `java.util.UUID`.

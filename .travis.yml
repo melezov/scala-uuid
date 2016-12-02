@@ -22,6 +22,6 @@ sudo: false
 notifications:
   email:
     recipients:
-      - marko@mentat-labs.com
+      - marko.elezovic@oradian.com
 
-script: sbt ++$TRAVIS_SCALA_VERSION publishLocal
+script: sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard
