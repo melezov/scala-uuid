@@ -34,7 +34,7 @@ homepage := Some(url("https://github.com/melezov/scala-uuid"))
 // ### PROGUARD SETTINGS ### //
 
 proguardSettings
-ProguardKeys.proguardVersion in Proguard := "5.2.1"
+ProguardKeys.proguardVersion in Proguard := "5.3"
 
 ProguardKeys.options in Proguard := {
   val programVer = version.value

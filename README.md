@@ -8,13 +8,12 @@
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-#### This is the **development** branch (0.2.2-SNAPSHOT).
-
-Latest version (0.2.1) has been published against all reasonable versions of Scala:  
+Latest version (0.2.2) has been published against all reasonable versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 **2.10.x**: 2.10.6  
-**2.11.x**: 2.11.7
+**2.11.x**: 2.11.8  
+**2.12.x**: 2.12.0
 
 #### Installation:
 

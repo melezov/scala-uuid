@@ -2,7 +2,6 @@ language: scala
 
 branches:
   only:
-    - master
     - 2.12.x
     - 2.11.x
     - 2.10.x
@@ -10,7 +9,7 @@ branches:
     - 2.8.x
 
 scala:
-  - "2.11.7"
+  - "2.11.8"
 
 jdk:
   - oraclejdk8
@@ -23,7 +22,7 @@ sudo: false
 notifications:
   email:
     recipients:
-      - marko@mentat-labs.com
+      - marko.elezovic@oradian.com
 
 script:
   # Try to build documentation, package sources, run ProGuard and test coverage

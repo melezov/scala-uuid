@@ -7,7 +7,7 @@ unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.6.5" % "test"
+libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.8.6" % "test"
 
 // ### COMPILE SETTINGS ### //
 javacOptions ++= Seq(
@@ -20,7 +20,7 @@ javacOptions ++= Seq(
   case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
   case _ => Nil
 })
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
@@ -57,4 +57,31 @@ scalacOptions in (Compile, doc) ++= Seq(
   }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
 )
 
-wartremoverErrors in (Compile, compile) ++= Warts.allBut(Wart.Throw, Wart.OptionPartial, Wart.Var)
+wartremoverWarnings in (Compile, compile) ++= Seq(
+  Wart.Any
+, Wart.Any2StringAdd
+, Wart.AsInstanceOf
+, Wart.DefaultArguments
+, Wart.EitherProjectionPartial
+, Wart.Enumeration
+, Wart.ExplicitImplicitTypes
+, Wart.FinalCaseClass
+, Wart.FinalVal
+, Wart.IsInstanceOf
+, Wart.JavaConversions
+, Wart.LeakingSealed
+, Wart.ListOps
+, Wart.MutableDataStructures
+, Wart.NoNeedForMonad
+, Wart.NonUnitStatements
+, Wart.Nothing
+, Wart.Null
+, Wart.Option2Iterable
+, Wart.Product
+, Wart.Return
+, Wart.Serializable
+, Wart.StringPlusAny
+, Wart.ToString
+, Wart.TraversableOps
+, Wart.TryPartial
+)
