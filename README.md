@@ -3,7 +3,6 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.9.3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.9.3)
 [![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.9.3.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.9.3)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.9.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.9.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
@@ -35,7 +34,7 @@ You will now have the `UUID` type and object available:
     res0: Class[io.jvm.uuid.UUID] = class java.util.UUID
 
 *Alternatively*, you can extend `io.jvm.uuid.Imports` and bring the implicits into scope that way.  
-This is fairly useful for [importing via (package) objects](src/test/scala/com/example/ImportFeatureSpec.scala#L32 "Open ImportFeatureSpec source"):
+This is fairly useful for importing via (package) objects:
 
     scala> object MyClass extends io.jvm.uuid.Imports
     defined object MyClass
@@ -120,7 +119,7 @@ but it has a lot of interesting *features*:
     scala> foo.charArray
     res18: Array[Char] = Array(1, 7, f, a, 3, a, 1, 7, -, ..., -, 5, 4, 8, 8, 2, c, d, d, 7, d, 7, 8)
 
-String accessors are much more optimized than vanilla `toString` ([**3x** speedup](src/main/scala/io/jvm/uuid/RichUUID.scala#L125 "Open RichUUID.scala source")), and come in two flavors:
+String accessors are much more optimized than vanilla `toString` ([**3x** speedup](src/main/scala/io/jvm/uuid/RichUUID.scala#L122 "Open RichUUID.scala source")), and come in two flavors:
 
     scala> foo.string // lower-case by default
     res19: String = 17fa3a17-a302-4fd7-81f8-54882cdd7d78
@@ -141,5 +140,5 @@ An optimized `String` extractor is also available for your needs (e.g. when extr
     scala> val SubmitEventRoute(UUID(eventId)) = "/event/EF72505A-A9A6-4CD7-A14C-8F27C96FD727/submit"
     eventId: io.jvm.uuid.UUID = ef72505a-a9a6-4cd7-a14c-8f27c96fd727
 
-For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
+For more information, check out the [feature spec on the 2.12.x branch](../2.12.x/src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
