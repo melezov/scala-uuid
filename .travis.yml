@@ -26,7 +26,7 @@ notifications:
 
 script:
   # Try to build documentation, package sources, run ProGuard and test coverage
-  - sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard clean coverage test
+  - sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard clean coverage test coverageReport
 
 after_success:
-  - pip install --user codecov && codecov
+  - bash <(curl -s https://codecov.io/bash)
