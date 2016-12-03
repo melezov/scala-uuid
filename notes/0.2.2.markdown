@@ -1,5 +1,5 @@
-New use cases & optimizations!
+Published against Scala 2.12.0!
 
 ### Changes:
 - Added UUID.randomString
-- Proguarded against JRE6
+- Proguarded against JRE6 (2.11.8) & JRE8 (2.12.0)
