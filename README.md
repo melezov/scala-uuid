@@ -1,7 +1,7 @@
 # scala-uuid
 [![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.12.x)](https://travis-ci.org/melezov/scala-uuid)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12.0-M3)
-[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.0-M3)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12)
+[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.12.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.12.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)

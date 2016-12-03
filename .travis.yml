@@ -22,8 +22,8 @@ notifications:
       - marko.elezovic@oradian.com
 
 script:
-  # Try to build documentation, package sources, run ProGuard and test
-  - sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard clean test
+  # Try to build documentation, package sources, run ProGuard and test coverage
+  - sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard clean coverage test coverageReport
 
-# after_success:
-#   - pip install --user codecov && codecov
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
