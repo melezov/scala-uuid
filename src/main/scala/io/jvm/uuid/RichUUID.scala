@@ -5,6 +5,11 @@ private[uuid] object RichUUID {
   private final val UppercaseLookup: Array[Char] = "0123456789ABCDEF".toCharArray
   /** Lower-case hexadecimal translation lookup. */
   private final val LowercaseLookup: Array[Char] = "0123456789abcdef".toCharArray
+
+  /** Char buffer to be used by the optimized .string method */
+  private final val charBuffer: ThreadLocal[Array[Char]] = new ThreadLocal[Array[Char]] {
+    override final def initialValue(): Array[Char] = new Array[Char](36)
+  }
 }
 
 /** Pimp-my-library pattern, wrapping the underlying `java.util.UUID`.
@@ -14,7 +19,7 @@ private[uuid] object RichUUID {
   *
   * The pimp is complete through an implicit conversion in the
   * [[Imports]] trait or the [[io.jvm.uuid.package uuid]] package object. */
-class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
+final class RichUUID private[uuid] (final val uuid: UUID) extends AnyVal {
   /** Returns the most significant 64 bits of this `UUID`. */
   final def mostSigBits: Long = uuid.getMostSignificantBits
 
@@ -183,10 +188,10 @@ class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
   final def toUpperCase: String = toStringViaLookup(RichUUID.UppercaseLookup)
 
   /** Translate this `UUID` to a `String` via the provided lookup.
-    * This method should be inlined. */
+    * This method should be inlined, to constant-fold the offset. */
   @inline private[this] final def toStringViaLookup(lookup: Array[Char]): String = {
-    val buffer = new Array[Char](36)
+    val buffer = RichUUID.charBuffer.get()
     toCharArrayViaLookup(buffer, 0, lookup)
-    new String(buffer)
+    new String(buffer) // return ownership of the buffer to ThreadLocal
   }
 }
