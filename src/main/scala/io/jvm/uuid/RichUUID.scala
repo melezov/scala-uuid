@@ -1,6 +1,6 @@
 package io.jvm.uuid
 
-private[this] object RichUUID {
+private[uuid] object RichUUID {
   /** Upper-case hexadecimal translation lookup. */
   private final val UppercaseLookup: Array[Char] = "0123456789ABCDEF".toCharArray
   /** Lower-case hexadecimal translation lookup. */
