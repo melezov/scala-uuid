@@ -1,0 +1,5 @@
+Published against Scala 2.12.2!
+
+### Changes:
+- Optimized .string (7x speedup over java.util.UUID.toString)
+- Proguarded against JRE6 (2.11.11) & JRE8 (2.12.2)
