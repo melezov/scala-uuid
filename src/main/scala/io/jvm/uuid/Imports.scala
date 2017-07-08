@@ -17,9 +17,9 @@ package io.jvm.uuid
   * class User(val id: UUID = UUID.random)
   * }}} */
 trait Imports {
-  type UUID = java.util.UUID
-  val UUID = StaticUUID
+  final type UUID = java.util.UUID
+  final val UUID: StaticUUID = StaticUUID
 
-  implicit def toRichUUID(uuid: UUID): RichUUID =
+  implicit final def toRichUUID(uuid: UUID): RichUUID =
     new RichUUID(uuid)
 }

@@ -1,22 +1,12 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.2.2"
+version := "0.2.3"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### COMPILE SETTINGS ### //
-javacOptions ++= Seq(
-  "-encoding", "UTF-8"
-, "-deprecation"
-, "-Xlint"
-, "-target", "1.6"
-, "-source", "1.6"
-) ++ (sys.env.get("JAVA6_HOME") match {
-  case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
-  case _ => Nil
-})
 crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2", "2.9.3")
 scalaVersion := crossScalaVersions.value.head
 scalacOptions ++= Seq(
@@ -24,7 +14,6 @@ scalacOptions ++= Seq(
 , "-encoding", "UTF-8"
 , "-optimise"
 , "-unchecked"
-, "-Xfatal-warnings"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
 , "-Yclosure-elim"
@@ -32,6 +21,7 @@ scalacOptions ++= Seq(
 , "-Yinline"
 , "-Ywarn-dead-code"
 )
+
 scalacOptions in (Compile, doc) ++= Seq(
   "-sourcepath", (scalaSource in Compile).value.toString
 , "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
