@@ -7,42 +7,39 @@ unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.8.6" % "test"
+libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.9.2" % "test"
 
 // ### COMPILE SETTINGS ### //
-javacOptions ++= Seq(
-  "-encoding", "UTF-8"
-, "-deprecation"
-, "-Xlint"
-, "-target", "1.6"
-, "-source", "1.6"
-) ++ (sys.env.get("JAVA6_HOME") match {
-  case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
-  case _ => Nil
-})
-scalaVersion := "2.12.0"
+scalaVersion := "2.12.2"
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
 , "-feature"
-, "-language:implicitConversions"
+, "-language:_"
+, "-opt-warnings:_"
 , "-opt:_"
+, "-target:jvm-1.8"
 , "-unchecked"
-, "-Xfatal-warnings"
-, "-Xlint"
+, "-Xdev"
+, "-Xexperimental"
+, "-Xfuture"
+, "-Xlint:_"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
+, "-Xstrict-inference"
 , "-Xverify"
+, "-Yno-adapted-args"
+, "-Yno-generic-signatures"
+, "-Yopt-log-inline", "_"
+, "-Yrangepos"
 , "-Yrepl-sync"
-, "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
-, "-Ywarn-inaccessible"
-, "-Ywarn-infer-any"
-, "-Ywarn-nullary-override"
-, "-Ywarn-nullary-unit"
 , "-Ywarn-numeric-widen"
+, "-Ywarn-unused-import"
 , "-Ywarn-unused"
+, "-Ywarn-value-discard"
 )
+
 scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings"
 , "-sourcepath", (scalaSource in Compile).value.toString
@@ -51,31 +48,13 @@ scalacOptions in (Compile, doc) ++= Seq(
   }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
 )
 
-wartremoverWarnings in (Compile, compile) ++= Seq(
-  Wart.Any
-, Wart.Any2StringAdd
-, Wart.AsInstanceOf
-, Wart.DefaultArguments
-, Wart.EitherProjectionPartial
-, Wart.Enumeration
-, Wart.ExplicitImplicitTypes
-, Wart.FinalCaseClass
-, Wart.FinalVal
-, Wart.IsInstanceOf
-, Wart.JavaConversions
-, Wart.LeakingSealed
-, Wart.ListOps
-, Wart.MutableDataStructures
-, Wart.NoNeedForMonad
-, Wart.NonUnitStatements
-, Wart.Nothing
+wartremoverWarnings in (Compile, compile) := Warts.allBut(
+  Wart.Equals
+, Wart.ImplicitConversion
 , Wart.Null
-, Wart.Option2Iterable
-, Wart.Product
-, Wart.Return
-, Wart.Serializable
+, Wart.Overloading
 , Wart.StringPlusAny
-, Wart.ToString
-, Wart.TraversableOps
-, Wart.TryPartial
+, Wart.Throw
+, Wart.Var
+, Wart.While
 )
