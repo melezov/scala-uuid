@@ -9,7 +9,7 @@ object StaticUUID extends StaticUUID
 class StaticUUID {
   /** Generates a random `UUID` (type 4) using a cryptographically strong pseudo random number generator. */
   final def random: UUID =
-    randomUUID()
+    java.util.UUID.randomUUID()
 
   /** Creates a new `UUID` by concatenating two 64-bit values.
     * @param  mostSigBits Most significant bits of the new `UUID`
@@ -22,7 +22,7 @@ class StaticUUID {
     if (expected != actual) throwInvalidLength(tpe, expected, actual)
 
   /** Throws an exception because there was a length mismatch.
-    * If the actual length was greater than what was expected, suggests using the alternative constructor. */
+    * If the actual length was greater than what was expected, suggest using the alternative constructor. */
   private[this] final def throwInvalidLength(tpe: String, expected: Int, actual: Int): Nothing =
     throw new IllegalArgumentException(
       (if (tpe == "int") "Expecting an " else "Expecting a ") + tpe + " array of length " + expected + ", but length was " + actual + (
@@ -140,14 +140,14 @@ class StaticUUID {
     * @param  offset Position of the first `Char` in the array. */
   final def fromCharArray(buffer: Array[Char], offset: Int): UUID = {
     val res = fromCharArrayViaLookup(buffer, offset, Lookup)
-    if (!res.isDefined) throw new IllegalArgumentException(
+    if (res eq null) throw new IllegalArgumentException(
         "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " +
         new String(buffer, offset, math.min(buffer.length - offset, 36))+ ")")
-    res.get
+    res
   }
 
   /** Parses an `UUID` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format from an array of characters, helper utility. */
-  private[this] final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): Option[UUID] = try {
+  private[this] final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): UUID = try {
     val msb3 = (
       (lookup(buffer(offset +  0).toInt) << 12)
     | (lookup(buffer(offset +  1).toInt) <<  8)
@@ -207,36 +207,36 @@ class StaticUUID {
     // check for separators and if any of the characters were not a hexadecimal value
     if (buffer(offset +  8) != '-' || buffer(offset + 13) != '-' ||
         buffer(offset + 18) != '-' || buffer(offset + 23) != '-' ||
-        (msb3 | msb2 | msb1 | msb0 | lsb3 | lsb2 | lsb1 | lsb0) < 0) None else {
-      Some(UUID(
+        (msb3 | msb2 | msb1 | msb0 | lsb3 | lsb2 | lsb1 | lsb0) < 0) null else {
+      UUID(
         (((msb3 << 16) | msb2).toLong << 32) | (msb1.toLong << 16) | msb0
       , (((lsb3 << 16) | lsb2).toLong << 32) | (lsb1.toLong << 16) | lsb0
-      ))
+      )
     }
   } catch {
     case _: ArrayIndexOutOfBoundsException =>
-      None
+      null
   }
 
   /** Strict parser proxy, should be inlined & optimized */
-  @inline private[this] final def fromStrictString(uuid: String): Option[UUID] =
+  @inline private[this] final def fromStrictString(uuid: String): UUID =
     if (uuid.length == 36) {
       fromCharArrayViaLookup(uuid.toCharArray, 0, Lookup)
     } else {
-      None
+      null
     }
 
   /** Creates a new `UUID` by parsing a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
   final def apply(uuid: String): UUID = {
     val res = fromStrictString(uuid)
-    if (!res.isDefined) throw new IllegalArgumentException(
+    if (res eq null) throw new IllegalArgumentException(
         "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + uuid + ")")
-    res.get
+    res
   }
 
   /** Extractor which parses a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
   final def unapply(uuid: String): Option[UUID] =
-    fromStrictString(uuid)
+    Option(fromStrictString(uuid))
 
   /** Allows for parsing using the legacy, non-strict parser used in `java.util.UUID.fromString` */
   final def apply(uuid: String, strict: Boolean): UUID =
