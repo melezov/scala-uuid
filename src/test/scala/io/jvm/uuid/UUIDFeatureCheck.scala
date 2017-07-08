@@ -134,7 +134,7 @@ class UUIDFeatureCheck
   }
 
   def nonStrictStringWithCheck = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
-    val w0 :: w1 :: w2 :: w3 :: w4 :: Nil = nss.split("-").toList
+    val Array(w0, w1, w2, w3, w4) = nss.split("-")
     val ss = s"${w0.untrim(8)}-${w1.untrim(4)}-${w2.untrim(4)}-${w3.untrim(4)}-${w4.untrim(12)}"
     val result = Try { UUID(nss, true).string }
     if (nss == ss) {
@@ -284,7 +284,7 @@ class UUIDFeatureCheck
     dst.tail.init ==== src.tail.init.map(_.toLower)
   }
 
-  def randomString = Prop.forAll() { _ =>
+  def randomString = Prop.forAll(()) { _ =>
     val uuidString = UUID.randomString
     uuidString ==== uuidString.toLowerCase(Locale.ENGLISH) &&
     UUID(uuidString).string ==== uuidString
@@ -307,7 +307,7 @@ class UUIDFeatureCheck
 
   /** Random conforms to version 4 spec:
     * xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx where x is any hexadecimal digit and y is one of 8, 9, A, or B */
-  def randomIsVersion4 = Prop.forAll() { _ =>
+  def randomIsVersion4 = Prop.forAll(()) { _ =>
     val uuid = UUID.random
     val version = (uuid.getMostSignificantBits >>> 12) & 0xF
     val variant = uuid.getLeastSignificantBits >>> 62

@@ -1,25 +1,15 @@
 // ### BASIC SETTINGS ### //
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.2.2"
+version := "0.2.3"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.8.6" % "test"
+libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.9.2" % "test"
 
 // ### COMPILE SETTINGS ### //
-javacOptions ++= Seq(
-  "-encoding", "UTF-8"
-, "-deprecation"
-, "-Xlint"
-, "-target", "1.6"
-, "-source", "1.6"
-) ++ (sys.env.get("JAVA6_HOME") match {
-  case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
-  case _ => Nil
-})
 scalaVersion := "2.10.6"
 scalacOptions ++= Seq(
   "-deprecation"
@@ -29,7 +19,6 @@ scalacOptions ++= Seq(
 , "-optimise"
 , "-target:jvm-1.6"
 , "-unchecked"
-, "-Xfatal-warnings"
 , "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
@@ -46,6 +35,7 @@ scalacOptions ++= Seq(
 , "-Ywarn-nullary-unit"
 , "-Ywarn-numeric-widen"
 )
+
 scalacOptions in (Compile, doc) ++= Seq(
   "-no-link-warnings"
 , "-sourcepath", (scalaSource in Compile).value.toString
