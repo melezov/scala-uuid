@@ -50,8 +50,9 @@ ProguardKeys.options in Proguard := {
     Path.userHome / s"/.ivy2/cache/org.scala-lang/scala-library/jars/${scalaJarName}"
   )
 
-  // Try javaHome, then runtime JVM
-  val jreMin = (javaHome.value).getOrElse(
+  // Try environment setting, then javaHome, then runtime JVM
+  val java6Home = sys.env.get("JAVA6_HOME").map(new File(_))
+  val jreMin = (java6Home orElse javaHome.value).getOrElse(
     new File(sys.props("java.home"))
   )
 
@@ -66,7 +67,7 @@ ProguardKeys.options in Proguard := {
 
   s"""
 -injars '${inJar}'
--target 1.8
+-target 1.6
 -libraryjars '${runtimeJar}'
 -libraryjars '${scalaJarFile}'
 -outjars '${outJar}'

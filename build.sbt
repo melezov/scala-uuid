@@ -20,19 +20,25 @@ javacOptions ++= Seq(
   case Some(java6Home) => Seq("-bootclasspath", java6Home + "/lib/rt.jar")
   case _ => Nil
 })
-scalaVersion := "2.12.0"
+scalaVersion := "2.11.8"
 scalacOptions ++= Seq(
   "-deprecation"
 , "-encoding", "UTF-8"
 , "-feature"
 , "-language:implicitConversions"
-, "-opt:_"
+, "-optimise"
+, "-target:jvm-1.6"
 , "-unchecked"
 , "-Xfatal-warnings"
 , "-Xlint"
 , "-Xmax-classfile-name", "72"
 , "-Xno-forwarders"
 , "-Xverify"
+, "-Yclosure-elim"
+, "-Yconst-opt"
+, "-Ydead-code"
+, "-Yinline-warnings"
+, "-Yinline"
 , "-Yrepl-sync"
 , "-Ywarn-adapted-args"
 , "-Ywarn-dead-code"
