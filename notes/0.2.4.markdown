@@ -1,0 +1,5 @@
+Use native UUID.toString if running on Oracle Java 9+
+
+### Changes:
+- Add bench project with toString/fromString benchmarks
+- Bump Scala versions: Scala 2.13.0-M3, 2.12.4, 2.11.12 & 2.10.7

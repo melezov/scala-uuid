@@ -139,15 +139,21 @@ class StaticUUID {
   /** Creates a new `UUID` by parsing 36 chars in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format.
     * @param  offset Position of the first `Char` in the array. */
   @inline final def fromCharArray(buffer: Array[Char], offset: Int): UUID = {
-    val res = fromCharArrayViaLookup(buffer, offset, Lookup)
+    val res = try {
+      fromCharArrayViaLookup(buffer, offset, Lookup)
+    } catch {
+      case _: ArrayIndexOutOfBoundsException => null
+    }
     if (res eq null) throw new IllegalArgumentException(
       "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " +
         new String(buffer, offset, math.min(buffer.length - offset, 36))+ ")")
     res
   }
 
-  /** Parses an `UUID` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format from an array of characters, helper utility. */
-  @inline private[this] final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): UUID = try {
+  /** Parses an `UUID` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format from an array of characters, helper utility.
+    * @throws ArrayIndexOutOfBoundsException in case of character whose value is > max of hex lookup
+    *         Scalac is incompetent when inlining error handling, so this needs to be handled by the callee */
+  @inline private[this] final def fromCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Int]): UUID = {
     val msb3 = (
       (lookup(buffer(offset +  0).toInt) << 12)
     | (lookup(buffer(offset +  1).toInt) <<  8)
@@ -213,9 +219,6 @@ class StaticUUID {
       , (((lsb3 << 16) | lsb2).toLong << 32) | (lsb1.toLong << 16) | lsb0
       )
     }
-  } catch {
-    case _: ArrayIndexOutOfBoundsException =>
-      null
   }
 
   /** Strict parser proxy, should be inlined & optimized */
@@ -228,15 +231,22 @@ class StaticUUID {
 
   /** Creates a new `UUID` by parsing a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
   final def apply(uuid: String): UUID = {
-    val res = fromStrictString(uuid)
+    val res = try {
+      fromStrictString(uuid)
+    } catch {
+      case _: ArrayIndexOutOfBoundsException => null
+    }
     if (res eq null) throw new IllegalArgumentException(
       "UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + uuid + ")")
     res
   }
 
   /** Extractor which parses a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
-  final def unapply(uuid: String): Option[UUID] =
+  final def unapply(uuid: String): Option[UUID] = try {
     Option(fromStrictString(uuid))
+  } catch {
+    case _: ArrayIndexOutOfBoundsException => None
+  }
 
   /** Allows for parsing using the legacy, non-strict parser used in `java.util.UUID.fromString` */
   @inline final def apply(uuid: String, strict: Boolean): UUID =

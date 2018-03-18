@@ -20,7 +20,8 @@ class UUIDFeatureCheck
     strict                        $strictString
     non-strict (fail)             $nonStrictString
     strict with check             $strictStringWithCheck
-    non-strict with check (fail)  $strictStringFailure
+    non-strict with check (fail)  $invalidStrictStringFailure
+    unapply with invalid (fail)   $unapplyWithInvalidStringFailure
     non-strict with check         $nonStrictStringWithCheck
     apply with suffix (fail)      $applyWithSuffixFailure
     unapply with suffix (fail)    $unapplyWithSuffixFailure
@@ -100,12 +101,12 @@ class UUIDFeatureCheck
   } yield s"$w0-$w1-$w2-$w3-$w4"
 
   def strictString = Prop.forAllNoShrink(strictStringGen) { ss =>
-    UUID(ss       ).string ==== ss.toLowerCase(Locale.ENGLISH) &&
-    UUID(ss, false).string ==== ss.toLowerCase(Locale.ENGLISH)
-    UUID(ss       ).toLowerCase ==== ss.toLowerCase(Locale.ENGLISH) &&
-    UUID(ss, false).toLowerCase ==== ss.toLowerCase(Locale.ENGLISH)
-    UUID(ss       ).toUpperCase ==== ss.toUpperCase(Locale.ENGLISH) &&
-    UUID(ss, false).toUpperCase ==== ss.toUpperCase(Locale.ENGLISH)
+    UUID(ss       ).string ==== ss.toLowerCase(Locale.ROOT) &&
+    UUID(ss, false).string ==== ss.toLowerCase(Locale.ROOT)
+    UUID(ss       ).toLowerCase ==== ss.toLowerCase(Locale.ROOT) &&
+    UUID(ss, false).toLowerCase ==== ss.toLowerCase(Locale.ROOT)
+    UUID(ss       ).toUpperCase ==== ss.toUpperCase(Locale.ROOT) &&
+    UUID(ss, false).toUpperCase ==== ss.toUpperCase(Locale.ROOT)
   }
 
   def nonStrictString = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
@@ -114,7 +115,7 @@ class UUIDFeatureCheck
   }
 
   def strictStringWithCheck = Prop.forAllNoShrink(strictStringGen) { ss =>
-    UUID(ss, true).string ==== ss.toLowerCase(Locale.ENGLISH)
+    UUID(ss, true).string ==== ss.toLowerCase(Locale.ROOT)
   }
 
   private val placeInStrictStringGen = Gen.choose(0, UUID.random.string.length - 1)
@@ -128,9 +129,12 @@ class UUIDFeatureCheck
     lower <- nonHexCharGen
   } yield ss.updated(index, lower)
 
-  // Tests parsing which produces ArrayIndexOutOfBoundsException
-  def strictStringFailure = Prop.forAllNoShrink(invalidStrictStringGen) { iss =>
-    Try { UUID(iss, true) }.isFailure
+  def invalidStrictStringFailure = Prop.forAllNoShrink(invalidStrictStringGen) { iss =>
+    UUID(iss, true) must throwA(new IllegalArgumentException("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + iss + ")"))
+  }
+
+  def unapplyWithInvalidStringFailure = Prop.forAllNoShrink(invalidStrictStringGen) { iss =>
+    UUID.unapply(iss) ==== None
   }
 
   def nonStrictStringWithCheck = Prop.forAllNoShrink(nonStrictStringGen) { nss =>
@@ -138,7 +142,7 @@ class UUIDFeatureCheck
     val ss = s"${w0.untrim(8)}-${w1.untrim(4)}-${w2.untrim(4)}-${w3.untrim(4)}-${w4.untrim(12)}"
     val result = Try { UUID(nss, true).string }
     if (nss == ss) {
-      result == Success(ss.toLowerCase(Locale.ENGLISH))
+      result == Success(ss.toLowerCase(Locale.ROOT))
     } else {
       result.isFailure
     }
@@ -151,7 +155,7 @@ class UUIDFeatureCheck
   } yield ss + ch
 
   def applyWithSuffixFailure = Prop.forAllNoShrink(strictStringWithSuffixGen) { sss =>
-    Try { UUID(sss) }.isFailure
+    UUID(sss) must throwA(new IllegalArgumentException("UUID must be in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, where x is a hexadecimal digit (got: " + sss + ")"))
   }
 
   def unapplyWithSuffixFailure = Prop.forAllNoShrink(strictStringWithSuffixGen) { sss =>
@@ -286,7 +290,7 @@ class UUIDFeatureCheck
 
   def randomString = Prop.forAll(()) { _ =>
     val uuidString = UUID.randomString
-    uuidString ==== uuidString.toLowerCase(Locale.ENGLISH) &&
+    uuidString ==== uuidString.toLowerCase(Locale.ROOT) &&
     UUID(uuidString).string ==== uuidString
   }
 

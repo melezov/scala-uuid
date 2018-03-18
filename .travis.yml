@@ -2,6 +2,7 @@ language: scala
 
 branches:
   only:
+    - 2.13.x
     - 2.12.x
     - 2.11.x
     - 2.10.x
@@ -9,9 +10,10 @@ branches:
     - 2.8.x
 
 scala:
-  - "2.12.0"
+  - "2.12.4"
 
 jdk:
+  - oraclejdk9
   - oraclejdk8
 
 sudo: false
@@ -22,8 +24,8 @@ notifications:
       - marko.elezovic@oradian.com
 
 script:
-  # Try to build documentation, package sources, run ProGuard and test coverage
-  - sbt ++$TRAVIS_SCALA_VERSION publishLocal proguard:proguard clean coverage test coverageReport
+  # Try to build documentation, package sources and test coverage
+  - sbt ++$TRAVIS_SCALA_VERSION publishLocal clean coverage test coverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
