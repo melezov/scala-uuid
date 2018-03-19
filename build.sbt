@@ -8,6 +8,7 @@ unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 // ### DEPENDENCIES ### //
 libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "4.0.3" % "test"
 
+/*
 wartremoverWarnings in (Compile, compile) := Warts.allBut(
   Wart.Equals
 , Wart.ImplicitConversion
@@ -18,3 +19,4 @@ wartremoverWarnings in (Compile, compile) := Warts.allBut(
 , Wart.Var
 , Wart.While
 )
+*/

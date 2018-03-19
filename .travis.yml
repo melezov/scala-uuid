@@ -10,7 +10,7 @@ branches:
     - 2.8.x
 
 scala:
-  - "2.12.4"
+  - "2.13.0-M3"
 
 jdk:
   - oraclejdk9
@@ -25,8 +25,8 @@ notifications:
       - marko.elezovic@oradian.com
 
 script:
-  # Try to build documentation, package sources and test coverage
-  - sbt ++$TRAVIS_SCALA_VERSION publishLocal clean coverage test coverageReport
+  # Try to build documentation and package sources
+  - sbt ++$TRAVIS_SCALA_VERSION publishLocal
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
