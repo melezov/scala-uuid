@@ -1,1 +1,1 @@
-addSbtPlugin("com.typesafe.sbt" % "sbt-proguard" % "0.2.3")
+// addSbtPlugin("com.lightbend.sbt" % "sbt-proguard" % "0.3.0")

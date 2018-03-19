@@ -2,13 +2,22 @@ package io.jvm.uuid
 
 private[uuid] object RichUUID {
   /** Upper-case hexadecimal translation lookup. */
-  private final val UppercaseLookup: Array[Char] = "0123456789ABCDEF".toCharArray
+  private val UppercaseLookup: Array[Char] = "0123456789ABCDEF".toCharArray
   /** Lower-case hexadecimal translation lookup. */
-  private final val LowercaseLookup: Array[Char] = "0123456789abcdef".toCharArray
+  private val LowercaseLookup: Array[Char] = "0123456789abcdef".toCharArray
+
+  /** Oracle optimized toString in 9, no sense to compete with future versions */
+  private val UseNativeToString: Boolean =
+    try {
+      System.getProperty("java.vendor") == "Oracle Corporation" &&
+      System.getProperty("java.specification.version").toInt >= 9
+    } catch {
+      case _: Exception => false
+    }
 
   /** Char buffer to be used by the optimized .string method */
-  private final val charBuffer: ThreadLocal[Array[Char]] = new ThreadLocal[Array[Char]] {
-    override final def initialValue(): Array[Char] = new Array[Char](36)
+  private val charBuffer: ThreadLocal[Array[Char]] = new ThreadLocal[Array[Char]] {
+    override def initialValue(): Array[Char] = new Array[Char](36)
 }
 }
 
@@ -19,35 +28,35 @@ private[uuid] object RichUUID {
   *
   * The pimp is complete through an implicit conversion in the
   * [[uuid.Imports]] trait or the [[io.jvm.uuid.package]] package object. */
-final class RichUUID private[uuid] (final val uuid: UUID) {
+final class RichUUID private[uuid] (val uuid: UUID) {
   /** Returns the most significant 64 bits of this `UUID`. */
-  final def mostSigBits: Long = uuid.getMostSignificantBits
+  def mostSigBits: Long = uuid.getMostSignificantBits
 
   /** Returns the least significant 64 bits of this `UUID`. */
-  final def leastSigBits: Long = uuid.getLeastSignificantBits
+  def leastSigBits: Long = uuid.getLeastSignificantBits
 
   /** Encodes this `UUID` as a `Long` array with 2 elements. */
-  final def longArray: Array[Long] = {
+  def longArray: Array[Long] = {
     val buffer = new Array[Long](2)
     toLongArray(buffer, 0)
     buffer
   }
 
   /** Writes this `UUID` to the provided `Long` array. */
-  @inline final def toLongArray(buffer: Array[Long], offset: Int): Unit = {
+  @inline def toLongArray(buffer: Array[Long], offset: Int): Unit = {
     buffer(offset    ) = uuid.getMostSignificantBits
     buffer(offset + 1) = uuid.getLeastSignificantBits
   }
 
   /** Encodes this `UUID` as an `Int` array with 4 elements. */
-  final def intArray: Array[Int] = {
+  def intArray: Array[Int] = {
     val buffer = new Array[Int](4)
     toIntArray(buffer, 0)
     buffer
   }
 
   /** Writes this `UUID` to the provided `Int` array. */
-  @inline final def toIntArray(buffer: Array[Int], offset: Int): Unit = {
+  @inline def toIntArray(buffer: Array[Int], offset: Int): Unit = {
     val msb = uuid.getMostSignificantBits
     buffer(offset    ) = (msb >> 32).toInt
     buffer(offset + 1) = msb.toInt
@@ -58,14 +67,14 @@ final class RichUUID private[uuid] (final val uuid: UUID) {
   }
 
   /** Encodes this `UUID` as a `Short` array with 8 elements. */
-  final def shortArray: Array[Short] = {
+  def shortArray: Array[Short] = {
     val buffer = new Array[Short](8)
     toShortArray(buffer, 0)
     buffer
   }
 
   /** Writes this `UUID` to the provided `Short` array. */
-  @inline final def toShortArray(buffer: Array[Short], offset: Int): Unit = {
+  @inline def toShortArray(buffer: Array[Short], offset: Int): Unit = {
     val msb = uuid.getMostSignificantBits
     val msbh = (msb >> 32).toInt
     buffer(offset    ) = (msbh >> 16).toShort
@@ -86,14 +95,14 @@ final class RichUUID private[uuid] (final val uuid: UUID) {
   }
 
   /** Encodes this `UUID` as a `Byte` array with 16 elements. */
-  final def byteArray: Array[Byte] = {
+  def byteArray: Array[Byte] = {
     val buffer = new Array[Byte](16)
     toByteArray(buffer, 0)
     buffer
   }
 
   /** Writes this `UUID` to the provided `Byte` array. */
-  @inline final def toByteArray(buffer: Array[Byte], offset: Int): Unit = {
+  @inline def toByteArray(buffer: Array[Byte], offset: Int): Unit = {
     val msb = uuid.getMostSignificantBits
     buffer(offset     ) = (msb >>> 56).toByte
     buffer(offset +  1) = (msb >>> 48).toByte
@@ -116,18 +125,18 @@ final class RichUUID private[uuid] (final val uuid: UUID) {
   }
 
   /** Encodes this `UUID` as a `Char` array with 36 elements in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
-  final def charArray: Array[Char] = {
+  def charArray: Array[Char] = {
     val buffer = new Array[Char](36)
     toCharArrayViaLookup(buffer, 0, RichUUID.LowercaseLookup)
     buffer
   }
 
   /** Writes this `UUID` to the provided `Char` array in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format. */
-  final def toCharArray(buffer: Array[Char], offset: Int): Unit =
+  def toCharArray(buffer: Array[Char], offset: Int): Unit =
     toCharArrayViaLookup(buffer, offset, RichUUID.LowercaseLookup)
 
   /** Serializes this `UUID` to the provided `Char` array via a translation matrix. */
-  @inline private[this] final def toCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Char]): Unit = {
+  @inline private def toCharArrayViaLookup(buffer: Array[Char], offset: Int, lookup: Array[Char]): Unit = {
     val msb = uuid.getMostSignificantBits
     val msbh = (msb >>> 32).toInt
     buffer(offset     ) = lookup((msbh >>> 28)      )
@@ -178,18 +187,23 @@ final class RichUUID private[uuid] (final val uuid: UUID) {
   /** Returns this `UUID` as a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format.
     * Hexadecimal characters will be lower-cased.
     * This method is an optimized drop in replacement for the legacy `toString` method. */
-  final def string: String = toStringViaLookup(RichUUID.LowercaseLookup)
+  def string: String =
+    if (RichUUID.UseNativeToString) {
+      uuid.toString
+    } else {
+      toStringViaLookup(RichUUID.LowercaseLookup)
+    }
 
   /** Alias for `string` which implicitly returns a lower-cased `String`. */
-  @inline final def toLowerCase: String = string
+  @inline def toLowerCase: String = string
 
   /** Returns this `UUID` as a `String` in `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` format.
     * Hexadecimal characters will be upper-cased. */
-  final def toUpperCase: String = toStringViaLookup(RichUUID.UppercaseLookup)
+  def toUpperCase: String = toStringViaLookup(RichUUID.UppercaseLookup)
 
   /** Translate this `UUID` to a `String` via the provided lookup.
     * This method should be inlined, to constant-fold the offset. */
-  @inline private[this] final def toStringViaLookup(lookup: Array[Char]): String = {
+  @inline private def toStringViaLookup(lookup: Array[Char]): String = {
     val buffer = RichUUID.charBuffer.get()
     toCharArrayViaLookup(buffer, 0, lookup)
     new String(buffer) // return ownership of the buffer to ThreadLocal
