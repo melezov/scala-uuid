@@ -17,8 +17,12 @@ scala:
   - "2.9.0-1"
   - "2.9.0"
 
+addons:
+  apt:
+    packages:
+      - openjdk-6-jdk
+
 jdk:
-  - oraclejdk7
   - openjdk7
   - openjdk6
 
