@@ -8,12 +8,13 @@
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Cross-building is caring - latest version (`0.2.3`) has been published against all versions of Scala:  
+Cross-building is caring - latest version (`0.2.4`) has been published against all versions of Scala:  
 **2.8.x**: 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
-**2.10.x**: 2.10.6  
-**2.11.x**: 2.11.11  
-**2.12.x**: 2.12.2
+**2.10.x**: 2.10.7  
+**2.11.x**: 2.11.12  
+**2.12.x**: 2.12.4  
+**2.13.x**: 2.13.0-M3
 
 #### Installation:
 
@@ -21,7 +22,7 @@ Cross-building is caring - latest version (`0.2.3`) has been published against a
 To add the library dependency to your project, simply add:
 
 ```scala
-    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.3"
+    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.4"
 ```
 
 #### In order to use:
@@ -120,7 +121,7 @@ but it has a lot of interesting *features*:
     scala> foo.charArray
     res18: Array[Char] = Array(1, 7, f, a, 3, a, 1, 7, -, ..., -, 5, 4, 8, 8, 2, c, d, d, 7, d, 7, 8)
 
-String accessors are much more optimized than vanilla `toString` ([**7x** speedup](src/main/scala/io/jvm/uuid/RichUUID.scala#L125 "Open RichUUID.scala source")), and come in two flavors:
+String accessors are much more optimized than vanilla `toString` ([**7x** speedup](src/main/scala/io/jvm/uuid/RichUUID.scala#L139 "Open RichUUID.scala source")), and come in two flavors:
 
     scala> foo.string // lower-case by default
     res19: String = 17fa3a17-a302-4fd7-81f8-54882cdd7d78
