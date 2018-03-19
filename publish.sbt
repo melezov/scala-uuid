@@ -1,3 +1,12 @@
+// ### SCALADOC SETTINGS ### //
+
+scalacOptions in (Compile, doc) ++= Seq(
+  "-sourcepath", (scalaSource in Compile).value.toString
+, "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
+    CrossVersion.partialVersion(scalaVersion.value).get.productIterator.mkString(".")
+  }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
+)
+
 // ### PUBLISH SETTINGS ### //
 
 publishTo := Some(
@@ -31,18 +40,19 @@ pomIncludeRepository := { _ => false }
 
 homepage := Some(url("https://github.com/melezov/scala-uuid"))
 
+/*
 // ### PROGUARD SETTINGS ### //
 
-proguardSettings
-ProguardKeys.proguardVersion in Proguard := "5.3"
+enablePlugins(SbtProguard)
+proguardVersion in Proguard := "5.3"
 
-ProguardKeys.options in Proguard := {
+proguardOptions in Proguard := {
   val programVer = version.value
   val scalaVer = scalaVersion.value
   val scalaBinVer = scalaBinaryVersion.value
 
   val baseDir = baseDirectory.value
-  val binaryDeps = (ProguardKeys.binaryDeps in Proguard).value
+  val binaryDeps = (proguardBinaryDeps in Proguard).value
 
   // read lib path from binary relations, failover to default Ivy cache location
   val scalaJarName = s"scala-library-${scalaVer}.jar"
@@ -76,3 +86,4 @@ ProguardKeys.options in Proguard := {
 -keep class io.jvm.uuid.** { *; }
 """.trim.split("\n")
 }
+*/
