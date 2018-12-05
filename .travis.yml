@@ -10,7 +10,7 @@ branches:
     - 2.8.x
 
 scala:
-  - "2.12.4"
+  - "2.12.7"
 
 jdk:
   - oraclejdk9
