@@ -1,0 +1,9 @@
+Add unsigned long comparison support
+
+### Changes:
+- Make UUID extend Ordered[UUID]
+- Expose signed and unsigned Ordering[UUID]
+- Inline more helpers
+- Bump SBT to 1.2.7
+- Bump Scala versions to 2.13.0-M5, 2.12.7
+

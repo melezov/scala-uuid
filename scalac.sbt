@@ -1,3 +1,4 @@
+// -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2 required for <= JDK7
 crossScalaVersions := Seq("2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2", "2.9.3")
 scalaVersion := crossScalaVersions.value.head
 

@@ -7,13 +7,13 @@
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Cross-building is caring - latest version (`0.2.4`) has been published against all versions of Scala:  
+Cross-building is caring - latest version (`0.3.0`) has been published against all versions of Scala:  
 [**2.8.x**](https://github.com/melezov/scala-uuid/tree/2.8.x "Go to 2.8.x branch"): 2.8.1, 2.8.2  
 **2.9.x**: 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 [**2.10.x**](https://github.com/melezov/scala-uuid/tree/2.10.x "Go to 2.10.x branch"): 2.10.7  
 [**2.11.x**](https://github.com/melezov/scala-uuid/tree/2.11.x "Go to 2.11.x branch"): 2.11.12  
-[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.4  
-[**2.13.x**](https://github.com/melezov/scala-uuid/tree/2.13.x "Go to 2.13.x branch"): 2.13.0-M3
+[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.7  
+[**2.13.x**](https://github.com/melezov/scala-uuid/tree/2.13.x "Go to 2.13.x branch"): 2.13.0-M5
 
 #### Installation:
 
@@ -21,7 +21,7 @@ Cross-building is caring - latest version (`0.2.4`) has been published against a
 To add the library dependency to your project, simply add:
 
 ```scala
-    libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.4"
+libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.0"
 ```
 
 #### In order to use:
@@ -140,6 +140,21 @@ An optimized `String` extractor is also available for your needs (e.g. when extr
 
     scala> val SubmitEventRoute(UUID(eventId)) = "/event/EF72505A-A9A6-4CD7-A14C-8F27C96FD727/submit"
     eventId: io.jvm.uuid.UUID = ef72505a-a9a6-4cd7-a14c-8f27c96fd727
+
+#### Unsigned comparison by default:
+
+**WARNING**: JVM sorts UUIDs differently to the rest of the world (languages and databases).  
+This is due to default signed Long ordering and has been marked as a `Will Not Fix`
+due to legacy code:  
+https://bugs.java.com/bugdatabase/view_bug.do?bug_id=7025832
+
+**scala-uuid** provides sanity compatible unsigned ordering by default, compare and contrast:
+
+    scala> new java.util.UUID(0xffffffffffffffffL, 0) compareTo new java.util.UUID(1, 0)
+    res22: Int = -1
+
+    scala> UUID(0xffffffffffffffffL, 0) compare UUID(1, 0)
+    res23: Int = 1
 
 For more information, check out the [feature spec on the 2.12.x branch](../2.12.x/src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
