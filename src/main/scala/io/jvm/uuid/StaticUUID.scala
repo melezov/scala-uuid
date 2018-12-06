@@ -273,4 +273,12 @@ class StaticUUID {
   /** Digests the provided byte array using MD5 and returns a type 3 (name based) `UUID`. */
   final def nameUUIDFromBytes(name: Array[Byte]): UUID =
     java.util.UUID.nameUUIDFromBytes(name)
+
+  // --- Orderings ---
+
+  /** Default JDK UUID ordering */
+  val signedOrdering: Ordering[UUID] = Ordering.fromLessThan((x, y) => (x compareTo y) == -1)
+
+  /** Default scala-uuid ordering */
+  val unsignedOrdering: Ordering[UUID] = Ordering.fromLessThan(_ < _)
 }
