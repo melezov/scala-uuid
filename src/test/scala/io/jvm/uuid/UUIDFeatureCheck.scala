@@ -58,6 +58,10 @@ class UUIDFeatureCheck
   Version conformism
     naming is version 3           $namingIsVersion3
     random is version 4           $randomIsVersion4
+
+  Comparison
+    Signed via legacy    $signedComparison
+    Unsigned by default  $unsignedComparison
 """
 
   // Long roundtrips
@@ -316,5 +320,27 @@ class UUIDFeatureCheck
     val version = (uuid.getMostSignificantBits >>> 12) & 0xF
     val variant = uuid.getLeastSignificantBits >>> 62
     version ==== 4 && variant ==== 2
+  }
+
+  // Comparisons
+
+  def signedComparison = prop { (msb1: Long, lsb1: Long, msb2: Long, lsb2: Long) =>
+    val uuid1 = UUID(msb1, lsb1)
+    val uuid2 = UUID(msb2, lsb2)
+    (uuid1 compareTo uuid2) ==== {
+      val msb = java.lang.Long.compare(uuid1.mostSigBits, uuid2.mostSigBits)
+      val lsb = java.lang.Long.compare(uuid1.leastSigBits, uuid2.leastSigBits)
+      if (msb != 0) msb else lsb
+    }
+  }
+
+  def unsignedComparison = prop { (msb1: Long, lsb1: Long, msb2: Long, lsb2: Long) =>
+    val uuid1 = UUID(msb1, lsb1)
+    val uuid2 = UUID(msb2, lsb2)
+    (uuid1 compare uuid2) ==== {
+      val msb = java.lang.Long.compareUnsigned(uuid1.mostSigBits, uuid2.mostSigBits)
+      val lsb = java.lang.Long.compareUnsigned(uuid1.leastSigBits, uuid2.leastSigBits)
+      if (msb != 0) msb else lsb
+    }
   }
 }
