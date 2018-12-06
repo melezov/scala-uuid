@@ -28,12 +28,12 @@ private[uuid] object RichUUID {
   *
   * The pimp is complete through an implicit conversion in the
   * [[Imports]] trait or the [[io.jvm.uuid.package uuid]] package object. */
-final class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
+final class RichUUID private[uuid] (val uuid: UUID) extends AnyVal with Ordered[UUID] {
   /** Returns the most significant 64 bits of this `UUID`. */
-  def mostSigBits: Long = uuid.getMostSignificantBits
+  @inline def mostSigBits: Long = uuid.getMostSignificantBits
 
   /** Returns the least significant 64 bits of this `UUID`. */
-  def leastSigBits: Long = uuid.getLeastSignificantBits
+  @inline def leastSigBits: Long = uuid.getLeastSignificantBits
 
   /** Encodes this `UUID` as a `Long` array with 2 elements. */
   def longArray: Array[Long] = {
@@ -207,5 +207,27 @@ final class RichUUID private[uuid] (val uuid: UUID) extends AnyVal {
     val buffer = RichUUID.charBuffer.get()
     toCharArrayViaLookup(buffer, 0, lookup)
     new String(buffer) // return ownership of the buffer to ThreadLocal
+  }
+
+  /** WARNING: JVM sorts UUIDs differently to the rest of the world (languages and databases).
+    * This is due to default signed Long ordering and has been marked as a Will Not Fix
+    * due to legacy code: https://bugs.java.com/bugdatabase/view_bug.do?bug_id=7025832 */
+  override def compareTo(that: UUID): Int = uuid compareTo that
+
+  /** This comparison allows for sanity compatible unsigned ordering */
+  override def compare(that: UUID): Int = {
+    val umsb = uuid.getMostSignificantBits
+    val tmsb = that.getMostSignificantBits
+    if (umsb != tmsb) {
+      if (umsb + Long.MinValue < tmsb + Long.MinValue) -1 else 1
+    } else {
+      val ulsb = uuid.getLeastSignificantBits
+      val tlsb = that.getLeastSignificantBits
+      if (ulsb != tlsb) {
+        if (ulsb + Long.MinValue < tlsb + Long.MinValue) -1 else 1
+      } else {
+        0
+      }
+    }
   }
 }

@@ -1,3 +1,3 @@
 enablePlugins(JmhPlugin)
 
-libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.2.4"
+libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.0"

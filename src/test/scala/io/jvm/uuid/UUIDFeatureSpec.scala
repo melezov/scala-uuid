@@ -37,6 +37,11 @@ class UUIDFeatureSpec
   Extractors
     uuid extractor                     $uuidExtractor
     uuid extractor (failure)           $uuidExtractorFailure
+
+  Comparisons
+    signed comparison                  $signedComparsion
+    unsigned comparison by default     $unsignedComparsion
+    equal comparison                   $equalComparsion
 """
 
   private val u159bf = java.util.UUID.fromString("1-5-9-b-f")
@@ -126,4 +131,15 @@ class UUIDFeatureSpec
       case _ => true
     }
   }
+
+  // -- Comparison --
+
+  def signedComparsion =
+    (new RichUUID(UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")) compareTo u159bf) ==== -1
+
+  def unsignedComparsion =
+    (UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF") compare u159bf) ==== 1
+
+  def equalComparsion =
+    (u159bf compare u159bf) ==== 0
 }
