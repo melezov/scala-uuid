@@ -1,4 +1,4 @@
-scalaVersion := "2.13.0-M5"
+scalaVersion := "2.13.0"
 
 scalacOptions ++= Seq(
   "-deprecation"               // Emit warning and location for usages of deprecated APIs.
