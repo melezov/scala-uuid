@@ -13,7 +13,6 @@ scalacOptions ++= Seq(
 
 , "-Xcheckinit"                // Wrap field accessors to throw an exception on uninitialized access.
 , "-Xdev"                      // Indicates user is a developer - issue warnings about anything which seems amiss
-, "-Xfuture"                   // Turn on future language features.
 , "-Xlint:_"                   // Enable or disable specific warnings: `_' for all, `-Xlint:help' to list choices.
 , "-Xlog-reflective-calls"     // Print a message when a reflective method call is generated
 , "-Xmigration:2.11"           // Warn about constructs whose behavior may have changed since version.
