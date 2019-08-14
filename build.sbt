@@ -6,7 +6,7 @@ unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
 
 // ### DEPENDENCIES ### //
-libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "4.3.5" % Test
+libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "4.5.1" % Test
 
 /*
 wartremoverWarnings in (Compile, compile) := Warts.allBut(
