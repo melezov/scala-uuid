@@ -10,12 +10,17 @@ branches:
     - 2.8.x
 
 scala:
-  - "2.13.0-M5"
+  - "2.13.0"
 
 jdk:
-  - oraclejdk9
-  - oraclejdk8
+  - openjdk12
+  - openjdk11
+  - openjdk10
+  - openjdk9
   - openjdk8
+  - oraclejdk12
+  - oraclejdk11
+  - oraclejdk9
 
 sudo: false
 
@@ -26,7 +31,7 @@ notifications:
 
 script:
   # Try to build documentation and package sources
-  - sbt ++$TRAVIS_SCALA_VERSION publishLocal
+  - sbt ++$TRAVIS_SCALA_VERSION publishLocal clean coverage test coverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

@@ -1,5 +1,7 @@
 package io.jvm.uuid
 
+import scala.language.implicitConversions
+
 /** This trait holds all the components required for completing the pimp-my-library pattern:
   *  - an `UUID` type alias
   *  - an `UUID` singleton object with static forwarders and new `UUID` factories

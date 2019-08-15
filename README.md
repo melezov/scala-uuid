@@ -1,20 +1,20 @@
 # scala-uuid
 [![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.13.x)](https://travis-ci.org/melezov/scala-uuid)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.13.0-M5/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.13.0-M5)
-[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.13.0-M5.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.13.0-M5)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.13.0/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.13.0)
+[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.13.0.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.13.0)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.13.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.13.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Cross-building is caring - latest version (`0.3.0`) has been published against all versions of Scala:  
+Cross-building is caring - latest version (`0.3.1`) has been published against all versions of Scala:  
 [**2.8.x**](https://github.com/melezov/scala-uuid/tree/2.8.x "Go to 2.8.x branch"): 2.8.1, 2.8.2  
 [**2.9.x**](https://github.com/melezov/scala-uuid/tree/2.9.x "Go to 2.9.x branch"): 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 [**2.10.x**](https://github.com/melezov/scala-uuid/tree/2.10.x "Go to 2.10.x branch"): 2.10.7  
 [**2.11.x**](https://github.com/melezov/scala-uuid/tree/2.11.x "Go to 2.11.x branch"): 2.11.12  
-[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.7  
-**2.13.x**: 2.13.0-M5
+[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.9  
+**2.13.x**: 2.13.0
 
 #### Installation:
 
@@ -22,7 +22,7 @@ Cross-building is caring - latest version (`0.3.0`) has been published against a
 To add the library dependency to your project, simply add:
 
 ```scala
-libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.0"
+libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.1"
 ```
 
 #### In order to use:
@@ -157,5 +157,5 @@ https://bugs.java.com/bugdatabase/view_bug.do?bug_id=7025832
     scala> UUID(0xffffffffffffffffL, 0) compare UUID(1, 0)
     res23: Int = 1
 
-For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
+For more information, check out the [feature spec](src/test/scala/test/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
