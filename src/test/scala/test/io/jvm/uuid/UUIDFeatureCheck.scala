@@ -1,8 +1,9 @@
-package io.jvm.uuid
+package test.io.jvm.uuid
 
 import java.security.MessageDigest
 import java.util.Locale
 
+import io.jvm.uuid._
 import org.scalacheck._
 import org.specs2._
 

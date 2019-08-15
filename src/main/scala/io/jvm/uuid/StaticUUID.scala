@@ -277,8 +277,8 @@ class StaticUUID {
   // --- Orderings ---
 
   /** Default JDK UUID ordering */
-  val signedOrdering: Ordering[UUID] = (x: UUID, y: UUID) => x compareTo y
+  val signedOrdering: Ordering[UUID] = Ordering.fromLessThan((x, y) => (x compareTo y) == -1)
 
   /** Default scala-uuid ordering */
-  val unsignedOrdering: Ordering[UUID] = (x: UUID, y: UUID) => x compare y
+  val unsignedOrdering: Ordering[UUID] = Ordering.fromLessThan(_ < _)
 }

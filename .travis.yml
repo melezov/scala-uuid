@@ -12,17 +12,15 @@ branches:
 scala:
   - "2.11.12"
 
-addons:
-  apt:
-    packages:
-      - openjdk-6-jdk
-
 jdk:
-  - oraclejdk9
-  - oraclejdk8
+  - openjdk12
+  - openjdk11
+  - openjdk10
+  - openjdk9
   - openjdk8
-  - openjdk7
-  - openjdk6
+  - oraclejdk12
+  - oraclejdk11
+  - oraclejdk9
 
 sudo: false
 

@@ -1,4 +1,4 @@
-package com.example
+package test.io.jvm.uuid
 
 class ImportFeatureSpec
     extends org.specs2.Specification {

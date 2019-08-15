@@ -8,13 +8,13 @@
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Cross-building is caring - latest version (`0.3.0`) has been published against all versions of Scala:  
+Cross-building is caring - latest version (`0.3.1`) has been published against all versions of Scala:  
 [**2.8.x**](https://github.com/melezov/scala-uuid/tree/2.8.x "Go to 2.8.x branch"): 2.8.1, 2.8.2  
 [**2.9.x**](https://github.com/melezov/scala-uuid/tree/2.9.x "Go to 2.9.x branch"): 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 [**2.10.x**](https://github.com/melezov/scala-uuid/tree/2.10.x "Go to 2.10.x branch"): 2.10.7  
 **2.11.x**: 2.11.12  
-[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.7  
-[**2.13.x**](https://github.com/melezov/scala-uuid/tree/2.13.x "Go to 2.13.x branch"): 2.13.0-M5
+[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.9  
+[**2.13.x**](https://github.com/melezov/scala-uuid/tree/2.13.x "Go to 2.13.x branch"): 2.13.0
 
 #### Installation:
 
@@ -22,7 +22,7 @@ Cross-building is caring - latest version (`0.3.0`) has been published against a
 To add the library dependency to your project, simply add:
 
 ```scala
-libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.0"
+libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.1"
 ```
 
 #### In order to use:
@@ -75,7 +75,7 @@ This is fairly useful for [importing via (package) objects](src/test/scala/com/e
     scala> UUID("5ca1ab1e-Feed-Dead-Beef-CafeBabeC0de".toCharArray)
     res8: io.jvm.uuid.UUID = 5ca1ab1e-feed-dead-beef-cafebabec0de
 
-Bare in mind that the `String` constructor requires an **exact**, 36 character String representation:
+Bear in mind that the `String` constructor requires an **exact**, 36 character String representation:
 
     scala> UUID("01020304-0506-0708-090a-0b0c0d0e0f10")
     res9: io.jvm.uuid.UUID = 01020304-0506-0708-090a-0b0c0d0e0f10
@@ -157,5 +157,5 @@ https://bugs.java.com/bugdatabase/view_bug.do?bug_id=7025832
     scala> UUID(0xffffffffffffffffL, 0) compare UUID(1, 0)
     res23: Int = 1
 
-For more information, check out the [feature spec](src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
+For more information, check out the [feature spec](src/test/scala/test/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!

@@ -28,7 +28,7 @@ private[uuid] object RichUUID {
   *
   * The pimp is complete through an implicit conversion in the
   * [[Imports]] trait or the [[io.jvm.uuid.package uuid]] package object. */
-final class RichUUID private[uuid] (val uuid: UUID) extends AnyVal with Ordered[UUID] {
+final class RichUUID private[uuid](private val uuid: UUID) extends AnyVal with Ordered[UUID] {
   /** Returns the most significant 64 bits of this `UUID`. */
   @inline def mostSigBits: Long = uuid.getMostSignificantBits
 
