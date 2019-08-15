@@ -1,9 +1,9 @@
 # scala-uuid
-[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.13.x)](https://travis-ci.org/melezov/scala-uuid)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.13/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.13)
-[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.13.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.13)
+[![Build Status](https://travis-ci.org/melezov/scala-uuid.svg?branch=2.12.x)](https://travis-ci.org/melezov/scala-uuid)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.jvm.uuid/scala-uuid_2.12)
+[![Scaladoc](https://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12.svg?label=scaladoc)](http://javadoc-badge.appspot.com/io.jvm.uuid/scala-uuid_2.12)
 [![License](https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.13.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.13.x)
+[![Codecov](https://img.shields.io/codecov/c/github/melezov/scala-uuid/2.12.x.svg)](http://codecov.io/github/melezov/scala-uuid?branch=2.12.x)
 [![Codacy](https://api.codacy.com/project/badge/786c3c5e6fe24eed85733fd1848eef7e)](https://www.codacy.com/app/melezov/scala-uuid)
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
@@ -13,8 +13,8 @@ Cross-building is caring - latest version (`0.3.1`) has been published against a
 [**2.9.x**](https://github.com/melezov/scala-uuid/tree/2.9.x "Go to 2.9.x branch"): 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 [**2.10.x**](https://github.com/melezov/scala-uuid/tree/2.10.x "Go to 2.10.x branch"): 2.10.7  
 [**2.11.x**](https://github.com/melezov/scala-uuid/tree/2.11.x "Go to 2.11.x branch"): 2.11.12  
-[**2.12.x**](https://github.com/melezov/scala-uuid/tree/2.12.x "Go to 2.12.x branch"): 2.12.9  
-**2.13.x**: 2.13.0
+**2.12.x**: 2.12.9  
+[**2.13.x**](https://github.com/melezov/scala-uuid/tree/2.13.x "Go to 2.13.x branch"): 2.13.0
 
 #### Installation:
 
