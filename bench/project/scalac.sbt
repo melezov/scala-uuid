@@ -6,4 +6,5 @@ scalacOptions ++= Seq(
   "-language:_",
   "-unchecked",
   "-Xlint",
+  "-Ywarn-unused:-imports",
 )

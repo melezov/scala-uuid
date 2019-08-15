@@ -75,7 +75,7 @@ This is fairly useful for [importing via (package) objects](src/test/scala/com/e
     scala> UUID("5ca1ab1e-Feed-Dead-Beef-CafeBabeC0de".toCharArray)
     res8: io.jvm.uuid.UUID = 5ca1ab1e-feed-dead-beef-cafebabec0de
 
-Bare in mind that the `String` constructor requires an **exact**, 36 character String representation:
+Bear in mind that the `String` constructor requires an **exact**, 36 character String representation:
 
     scala> UUID("01020304-0506-0708-090a-0b0c0d0e0f10")
     res9: io.jvm.uuid.UUID = 01020304-0506-0708-090a-0b0c0d0e0f10
