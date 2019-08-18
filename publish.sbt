@@ -1,11 +1,11 @@
 // ### SCALADOC SETTINGS ### //
 
 scalacOptions in (Compile, doc) ++= Seq(
-  "-no-link-warnings"
-, "-sourcepath", (scalaSource in Compile).value.toString
-, "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
+  "-no-link-warnings",
+  "-sourcepath", (scalaSource in Compile).value.toString,
+  "-doc-source-url", s"""https://github.com/melezov/scala-uuid/blob/${version.value}-${
     CrossVersion.partialVersion(scalaVersion.value).get.productIterator.mkString(".")
-  }.x/src/main/scala\u20AC{FILE_PATH}.scala"""
+  }.x/src/main/scala\u20AC{FILE_PATH}.scala""",
 )
 
 // ### PUBLISH SETTINGS ### //
@@ -21,9 +21,9 @@ licenses += (("BSD-style", url("http://opensource.org/licenses/BSD-3-Clause")))
 startYear := Some(2013)
 
 scmInfo := Some(ScmInfo(
-  url("https://github.com/melezov/scala-uuid")
-, "scm:git:https://github.com/melezov/scala-uuid.git"
-, Some("scm:git:git@github.com:melezov/scala-uuid.git")
+  url("https://github.com/melezov/scala-uuid"),
+  "scm:git:https://github.com/melezov/scala-uuid.git",
+  Some("scm:git:git@github.com:melezov/scala-uuid.git"),
 ))
 
 pomExtra :=
