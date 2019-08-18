@@ -18,7 +18,7 @@ private[uuid] object RichUUID {
   /** Char buffer to be used by the optimized .string method */
   private val charBuffer: ThreadLocal[Array[Char]] = new ThreadLocal[Array[Char]] {
     override def initialValue(): Array[Char] = new Array[Char](36)
-}
+  }
 }
 
 /** Pimp-my-library pattern, wrapping the underlying `java.util.UUID`.
@@ -28,7 +28,7 @@ private[uuid] object RichUUID {
   *
   * The pimp is complete through an implicit conversion in the
   * [[uuid.Imports]] trait or the [[io.jvm.uuid.package]] package object. */
-final class RichUUID private[uuid] (val uuid: UUID) extends Ordered[UUID] {
+final class RichUUID private[uuid](val uuid: UUID) extends Ordered[UUID] {
   /** Returns the most significant 64 bits of this `UUID`. */
   @inline def mostSigBits: Long = uuid.getMostSignificantBits
 

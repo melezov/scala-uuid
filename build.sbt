@@ -1,6 +1,6 @@
 organization := "io.jvm.uuid"
 name := "scala-uuid"
-version := "0.3.0"
+version := "0.3.1"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
-unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)
+unmanagedSourceDirectories in Test := Nil
