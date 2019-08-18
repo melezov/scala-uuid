@@ -155,5 +155,5 @@ https://bugs.java.com/bugdatabase/view_bug.do?bug_id=7025832
     scala> UUID(0xffffffffffffffffL, 0) compare UUID(1, 0)
     res23: Int = 1
 
-For more information, check out the [feature spec on the 2.12.x branch](../2.12.x/src/test/scala/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
+For more information, check out the [feature spec on the 2.13.x branch](../2.13.x/src/test/scala/test/io/jvm/uuid/UUIDFeatureSpec.scala "Open UUIDFeatureSpec source").  
 Contributions are more than welcome!
