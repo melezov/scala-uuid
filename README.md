@@ -8,7 +8,7 @@
 
 An optimized Scala wrapper for `java.util.UUID` - inspired by [scala-time](https://github.com/jorgeortiz85/scala-time/ "A Scala wrapper for Joda Time").
 
-Cross-building is caring - latest version (`0.3.0`) has been published against all versions of Scala:  
+Cross-building is caring - latest version (`0.3.1`) has been published against all versions of Scala:  
 [**2.8.x**](https://github.com/melezov/scala-uuid/tree/2.8.x "Go to 2.8.x branch"): 2.8.1, 2.8.2  
 [**2.9.x**](https://github.com/melezov/scala-uuid/tree/2.9.x "Go to 2.9.x branch"): 2.9.0, 2.9.0-1, 2.9.1, 2.9.1-1, 2.9.2, 2.9.3  
 **2.10.x**: 2.10.7  
@@ -22,7 +22,7 @@ Cross-building is caring - latest version (`0.3.0`) has been published against a
 To add the library dependency to your project, simply add:
 
 ```scala
-libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.0"
+libraryDependencies += "io.jvm.uuid" %% "scala-uuid" % "0.3.1"
 ```
 
 #### In order to use:
