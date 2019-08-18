@@ -1,4 +1,6 @@
-package io.jvm.uuid
+package test.io.jvm.uuid
+
+import io.jvm.uuid._
 
 import scala.util.Try
 
@@ -40,7 +42,9 @@ class UUIDFeatureSpec
 
   Comparisons
     signed comparison                  $signedComparsion
+    signed comparison (via ordering)   $explictSignedComparsion
     unsigned comparison by default     $unsignedComparsion
+    unsigned comparison (via ordering) $explicitUnsignedComparsion
     equal comparison                   $equalComparsion
 """
 
@@ -135,10 +139,16 @@ class UUIDFeatureSpec
   // -- Comparison --
 
   def signedComparsion =
-    (new RichUUID(UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF")) compareTo u159bf) ==== -1
+    (UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF") compareTo u159bf) ==== -1
+
+  def explictSignedComparsion =
+    UUID.signedOrdering.compare(UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"), u159bf) ==== -1
 
   def unsignedComparsion =
     (UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF") compare u159bf) ==== 1
+
+  def explicitUnsignedComparsion =
+    UUID.unsignedOrdering.compare(UUID("FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"), u159bf) ==== 1
 
   def equalComparsion =
     (u159bf compare u159bf) ==== 0
